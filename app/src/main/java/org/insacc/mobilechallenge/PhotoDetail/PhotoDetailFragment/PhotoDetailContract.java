@@ -7,10 +7,17 @@ package org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment;
 public interface PhotoDetailContract {
 
     interface View {
+        void loadPhotoFromServer();
 
+        void loadPhotoDetails();
+
+        void dismissDialog();
     }
 
     interface Presenter {
 
+        void callLoadPhotoDetails();
+
+        void callDismiss();
     }
 }

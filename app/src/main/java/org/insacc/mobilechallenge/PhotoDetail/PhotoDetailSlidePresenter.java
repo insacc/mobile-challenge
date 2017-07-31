@@ -12,4 +12,9 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
     public PhotoDetailSlidePresenter(PhotoDetailSlideContract.View view) {
         this.mView = view;
     }
+
+    @Override
+    public void callLoadMorePhotos() {
+
+    }
 }

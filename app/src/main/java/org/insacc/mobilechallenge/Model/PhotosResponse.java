@@ -1,5 +1,8 @@
 package org.insacc.mobilechallenge.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
  * Created by can on 31.07.2017.
  */
 
-public class PhotosResponse {
+public class PhotosResponse implements Parcelable {
 
     @SerializedName("current_page")
     private int mCurrentPage;
@@ -25,6 +28,26 @@ public class PhotosResponse {
     @SerializedName("feature")
     private String mFeature;
 
+
+    protected PhotosResponse(Parcel in) {
+        mCurrentPage = in.readInt();
+        mTotalPages = in.readLong();
+        mTotalItems = in.readLong();
+        mPhotos = in.createTypedArrayList(Photo.CREATOR);
+        mFeature = in.readString();
+    }
+
+    public static final Creator<PhotosResponse> CREATOR = new Creator<PhotosResponse>() {
+        @Override
+        public PhotosResponse createFromParcel(Parcel in) {
+            return new PhotosResponse(in);
+        }
+
+        @Override
+        public PhotosResponse[] newArray(int size) {
+            return new PhotosResponse[size];
+        }
+    };
 
     public int getCurrentPage() {
         return mCurrentPage;
@@ -64,5 +87,19 @@ public class PhotosResponse {
 
     public void setFeature(String mFeature) {
         this.mFeature = mFeature;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mCurrentPage);
+        dest.writeLong(mTotalPages);
+        dest.writeLong(mTotalItems);
+        dest.writeTypedList(mPhotos);
+        dest.writeString(mFeature);
     }
 }

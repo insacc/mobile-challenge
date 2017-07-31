@@ -12,7 +12,9 @@ import com.fivehundredpx.greedolayout.GreedoSpacingItemDecoration;
 import org.insacc.mobilechallenge.Adapter.PhotoListAdapter;
 import org.insacc.mobilechallenge.AppModule.GetPhotosServiceModule;
 import org.insacc.mobilechallenge.Model.Photo;
+import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.MyApplication;
+import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailSlideDialog;
 import org.insacc.mobilechallenge.R;
 import org.insacc.mobilechallenge.Util;
 
@@ -37,6 +39,8 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private PhotoListAdapter mPhotoListAdapter;
 
     private int mPageCount = 1;
+
+    private PhotosResponse mPhotosResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,5 +75,21 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     public void displayLoadPhotoErrorMsg() {
 
         Toast.makeText(this, getString(R.string.photo_load_fail), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onImageClicked(int position) {
+
+    }
+
+    @Override
+    public void setPhotosResponse(PhotosResponse photosResponse) {
+        mPhotosResponse = photosResponse;
+    }
+
+    @Override
+    public void openFullScreenPhotoDialog(int position) {
+        PhotoDetailSlideDialog photoDetailSlideDialog = PhotoDetailSlideDialog.newInstance(mPhotosResponse, position);
+        photoDetailSlideDialog.show(getSupportFragmentManager(), "");
     }
 }

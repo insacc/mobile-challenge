@@ -59,12 +59,20 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     @Override
     public void onBindViewHolder(PhotoListViewHolder holder, int position) {
         Photo currentPhoto = mPhotoList.get(position);
+        final int tempPosition = position;
         Glide
                 .with((Context) mView)
                 .load(currentPhoto.getImageUrl())
 
 
                 .into(holder.mPhotoView);
+
+        holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.openFullScreenPhotoDialog(tempPosition);
+            }
+        });
     }
 
     @Override
@@ -78,7 +86,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         //return mImageAspectRatios.get(index);
         Photo photo = mPhotoList.get(index);
         double result = photo.getWidth() / photo.getHeight();
-        double resultTest = (double)photo.getWidth() / (double) photo.getHeight();
+        double resultTest = (double) photo.getWidth() / (double) photo.getHeight();
         return resultTest;
 
 

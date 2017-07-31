@@ -1,6 +1,9 @@
 package org.insacc.mobilechallenge.PhotoDetail;
 
+import org.insacc.mobilechallenge.CustomScope;
+
 import dagger.Module;
+import dagger.Provides;
 
 /**
  * Created by can on 31.07.2017.
@@ -8,4 +11,16 @@ import dagger.Module;
  */
 @Module
 public class PhotoDetailSlideModule {
+
+    private PhotoDetailSlideContract.View mView;
+
+    public PhotoDetailSlideModule(PhotoDetailSlideContract.View view) {
+        this.mView = view;
+    }
+
+    @Provides
+    @CustomScope
+    public PhotoDetailSlideContract.Presenter providesPresenter() {
+        return new PhotoDetailSlidePresenter(mView);
+    }
 }

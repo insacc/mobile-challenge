@@ -1,12 +1,15 @@
 package org.insacc.mobilechallenge.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by can on 31.07.2017.
  */
 
-public class User {
+public class User implements Parcelable {
     @SerializedName("id")
     private long mID;
     @SerializedName("username")
@@ -22,6 +25,28 @@ public class User {
 
     @SerializedName("avatars")
     private AvatarResponse mAvatarUrls;
+
+    protected User(Parcel in) {
+        mID = in.readLong();
+        mUserName = in.readString();
+        mFirstName = in.readString();
+        mLastName = in.readString();
+        mCity = in.readString();
+        mCountry = in.readString();
+        mAvatarUrls = in.readParcelable(AvatarResponse.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public long getID() {
         return mID;
@@ -77,5 +102,21 @@ public class User {
 
     public void setAvatarUrls(AvatarResponse mAvatarUrls) {
         this.mAvatarUrls = mAvatarUrls;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mID);
+        dest.writeString(mUserName);
+        dest.writeString(mFirstName);
+        dest.writeString(mLastName);
+        dest.writeString(mCity);
+        dest.writeString(mCountry);
+        dest.writeParcelable(mAvatarUrls, flags);
     }
 }

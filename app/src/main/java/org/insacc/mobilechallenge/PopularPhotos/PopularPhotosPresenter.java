@@ -30,8 +30,14 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     }
 
     @Override
+    public void callFullScreenPhotoDialog(int position) {
+        mView.openFullScreenPhotoDialog(position);
+    }
+
+    @Override
     public void onPhotoListLoaded(PhotosResponse photosResponse) {
         mView.populatePhotosList(photosResponse.getPhotos());
+        mView.setPhotosResponse(photosResponse);
     }
 
     @Override

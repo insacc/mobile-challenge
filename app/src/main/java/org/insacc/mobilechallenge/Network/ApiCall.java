@@ -19,7 +19,7 @@ public interface ApiCall {
     @GET("photos")
     Observable<PhotosResponse> getPhotos(@Query("feature") String featureName, @Query("exclude")
             String excludeCategory, @Query("page") int pageNumber, @Query("consumer_key") String consumerKey,
-                                         @Query("image_size") int imageSize);
+                                         @Query("image_size") String imageSize);
 
 
 }

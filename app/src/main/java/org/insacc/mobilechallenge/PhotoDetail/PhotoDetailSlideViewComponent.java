@@ -14,5 +14,7 @@ import dagger.Component;
 @Component(modules = PhotoDetailSlideModule.class, dependencies = AppComponent.class)
 public interface PhotoDetailSlideViewComponent {
 
+    void inject(PhotoDetailSlideDialog view);
+
 
 }

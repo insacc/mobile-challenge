@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="dialog_theme" parent="AppTheme">
+
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>

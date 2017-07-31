@@ -1,5 +1,8 @@
 package org.insacc.mobilechallenge.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Model class which represents a photo object.
  */
 
-public class Photo {
+public class Photo implements Parcelable {
 
     @SerializedName("width")
     private long mWidth;
@@ -44,6 +47,34 @@ public class Photo {
     @SerializedName("image_url")
     private String mImageUrl;
 
+
+    protected Photo(Parcel in) {
+        mWidth = in.readLong();
+        mHeight = in.readLong();
+        mId = in.readLong();
+        mName = in.readString();
+        mCamera = in.readString();
+        mLens = in.readString();
+        mTimesViewed = in.readLong();
+        mRating = in.readFloat();
+        mCommentsCount = in.readInt();
+        mFavoritesCount = in.readInt();
+        mHighestRating = in.readFloat();
+        mUser = in.readParcelable(User.class.getClassLoader());
+        mImageUrl = in.readString();
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
 
     public long getWidth() {
         return mWidth;
@@ -148,5 +179,27 @@ public class Photo {
 
     public void setImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mWidth);
+        dest.writeLong(mHeight);
+        dest.writeLong(mId);
+        dest.writeString(mName);
+        dest.writeString(mCamera);
+        dest.writeString(mLens);
+        dest.writeLong(mTimesViewed);
+        dest.writeFloat(mRating);
+        dest.writeInt(mCommentsCount);
+        dest.writeInt(mFavoritesCount);
+        dest.writeFloat(mHighestRating);
+        dest.writeParcelable(mUser, flags);
+        dest.writeString(mImageUrl);
     }
 }

@@ -36,7 +36,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
     public void getPhotos(String feature, String excludeCategory, int pageNumber, String consumerKey,
                           final GetPhotosCallback callback) {
         Observable<PhotosResponse> getPhotos = mApiCall.getPhotos(feature, excludeCategory, pageNumber,
-                consumerKey, 20)
+                consumerKey, "20,31")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
 

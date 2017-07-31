@@ -11,4 +11,16 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     public PhotoDetailPresenter(PhotoDetailContract.View view) {
         this.mView = view;
     }
+
+    @Override
+    public void callLoadPhotoDetails() {
+        mView.loadPhotoFromServer();
+        mView.loadPhotoDetails();
+
+    }
+
+    @Override
+    public void callDismiss() {
+        mView.dismissDialog();
+    }
 }
