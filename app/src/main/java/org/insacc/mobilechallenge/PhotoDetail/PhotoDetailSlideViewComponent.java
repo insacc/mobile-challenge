@@ -1,6 +1,7 @@
 package org.insacc.mobilechallenge.PhotoDetail;
 
 import org.insacc.mobilechallenge.AppModule.AppComponent;
+import org.insacc.mobilechallenge.CustomScope;
 
 import dagger.Component;
 
@@ -9,6 +10,7 @@ import dagger.Component;
  * This interface declares the functions used by PhotoDetailSlideDialog and PhotoDetailSlidePresenter classes.
  *
  */
+@CustomScope
 @Component(modules = PhotoDetailSlideModule.class, dependencies = AppComponent.class)
 public interface PhotoDetailSlideViewComponent {
 

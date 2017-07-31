@@ -13,10 +13,12 @@ public interface PopularPhotosContract {
     interface View {
 
         void populatePhotosList(List<Photo> photos);
+
+        void displayLoadPhotoErrorMsg();
     }
 
     interface Presenter {
 
-        void loadPhotos(int pageNumber);
+        void loadPhotos(int pageNumber, String consumerKey);
     }
 }
