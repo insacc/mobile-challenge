@@ -10,7 +10,7 @@ public interface PhotoDetailSlideContract {
 
     interface View {
 
-
+        void onLastImageIsDisplayed();
 
         void broadcastLoadMorePhotos();
 

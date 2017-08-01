@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Created by can on 31.07.2017.
+ * Contract class which defines the functions that the presenter and the view classes needs to
+ * implement.
  */
 
 public interface PopularPhotosContract {

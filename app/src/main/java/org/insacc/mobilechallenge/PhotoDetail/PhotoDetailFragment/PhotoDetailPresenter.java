@@ -2,6 +2,7 @@ package org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment;
 
 /**
  * Created by can on 31.07.2017.
+ * Presenter class for the PhotoDetailFragment which manages the view calls.
  */
 
 public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
@@ -12,6 +13,9 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         this.mView = view;
     }
 
+    /**
+     * Calls the functions to load the details of the photo.
+     */
     @Override
     public void callLoadPhotoDetails() {
         mView.loadPhotoFromServer();
@@ -19,6 +23,9 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
 
     }
 
+    /**
+     * Called to dismiss the dialog fragment
+     */
     @Override
     public void callDismiss() {
         mView.dismissDialog();

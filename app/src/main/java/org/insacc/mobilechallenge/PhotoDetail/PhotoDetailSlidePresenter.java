@@ -13,8 +13,12 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
         this.mView = view;
     }
 
+    /**
+     * Called when a new page needs to be fetched from the server, when the user swiped to the
+     * end of the slider.
+     */
     @Override
     public void callLoadMorePhotos() {
-
+        mView.broadcastLoadMorePhotos();
     }
 }
