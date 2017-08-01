@@ -5,4 +5,12 @@ package org.insacc.mobilechallenge.Events;
  */
 
 public class DismissDialogEvent {
+
+
+    public DismissDialogEvent() {
+
+
+    }
+
+
 }

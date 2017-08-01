@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.insacc.mobilechallenge.Events.DismissDialogEvent;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
+import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.R;
 
 import javax.inject.Inject;
@@ -112,7 +113,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     public void loadPhotoFromServer() {
         Glide.with(this)
 
-                .load(mPhotoDetail.getImageUrl())
+                .load(mPhotoDetail.getImageUrl().get(Config.IMAGE_SIZE_31_INDEX).getHttpsUrl())
                 .apply(RequestOptions.fitCenterTransform())
                 .into(mFullScreenImage);
     }

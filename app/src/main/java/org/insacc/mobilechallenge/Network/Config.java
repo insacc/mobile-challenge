@@ -12,4 +12,8 @@ public class Config {
     public static final String EXCLUDE_CATEGORY = "Nude";
 
     public static final String FEATURE_CATEGORY = "Popular";
+
+    public static final int IMAGE_SIZE_20_INDEX = 0;
+
+    public static final int IMAGE_SIZE_31_INDEX = 1;
 }

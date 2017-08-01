@@ -1,6 +1,6 @@
 package org.insacc.mobilechallenge.PopularPhotos;
 
-import org.insacc.mobilechallenge.Model.Photo;
+
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.Service.NetworkService.GetPhotosService;
@@ -17,6 +17,8 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
 
     private GetPhotosService mGetPhotosService;
 
+    private boolean mShouldNotifySlider;
+
     public PopularPhotosPresenter(PopularPhotosContract.View view, GetPhotosService getPhotosService) {
         this.mView = view;
         this.mGetPhotosService = getPhotosService;
@@ -24,9 +26,13 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
 
 
     @Override
-    public void loadPhotos(int pageNumber, String consumerKey) {
+    public void loadPhotos(int pageNumber, String consumerKey, boolean shouldNotifySlider) {
+
+        mShouldNotifySlider = shouldNotifySlider;
         mGetPhotosService.getPhotos(Config.FEATURE_CATEGORY, Config.EXCLUDE_CATEGORY, pageNumber,
                 consumerKey, this);
+
+
     }
 
     @Override
@@ -35,13 +41,23 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     }
 
     @Override
+    public void unSubscribe() {
+        mGetPhotosService.unSubscribe();
+    }
+
+    @Override
     public void onPhotoListLoaded(PhotosResponse photosResponse) {
         mView.populatePhotosList(photosResponse.getPhotos());
         mView.setPhotosResponse(photosResponse);
+        if (mShouldNotifySlider)
+            mView.notifySliderPhotosUpdated();
+
+        mShouldNotifySlider = false;
     }
 
     @Override
     public void onPhotoListLoadFail() {
         mView.displayLoadPhotoErrorMsg();
+        mShouldNotifySlider = false;
     }
 }

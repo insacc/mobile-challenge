@@ -22,12 +22,22 @@ public interface PopularPhotosContract {
         void setPhotosResponse(PhotosResponse photosResponse);
 
         void openFullScreenPhotoDialog(int position);
+
+        void onScrollLoadMorePhoto();
+
+        void notifySliderPhotosUpdated();
+
+
     }
 
     interface Presenter {
 
-        void loadPhotos(int pageNumber, String consumerKey);
+        void loadPhotos(int pageNumber, String consumerKey, boolean shouldNotifySlider);
 
         void callFullScreenPhotoDialog(int position);
+
+        void unSubscribe();
+
+
     }
 }

@@ -3,6 +3,7 @@ package org.insacc.mobilechallenge.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment.PhotoDetailFragment;
@@ -32,11 +33,19 @@ public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
         PhotoDetailFragment photoDetailFragment = PhotoDetailFragment.newInstance(mPhotoList.get(position));
 
 
+        if(position == getCount() -1)
+            mView.broadcastLoadMorePhotos();
+
         return photoDetailFragment;
     }
 
     @Override
     public int getCount() {
         return mPhotoList.size();
+    }
+
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
     }
 }

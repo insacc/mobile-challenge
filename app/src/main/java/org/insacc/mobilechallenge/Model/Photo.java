@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by can on 31.07.2017.
  * Model class which represents a photo object.
@@ -44,8 +46,8 @@ public class Photo implements Parcelable {
     @SerializedName("user")
     private User mUser;
 
-    @SerializedName("image_url")
-    private String mImageUrl;
+    @SerializedName("images")
+    private List<ImageResponse> mImageUrl;
 
 
     protected Photo(Parcel in) {
@@ -61,7 +63,7 @@ public class Photo implements Parcelable {
         mFavoritesCount = in.readInt();
         mHighestRating = in.readFloat();
         mUser = in.readParcelable(User.class.getClassLoader());
-        mImageUrl = in.readString();
+        mImageUrl = in.createTypedArrayList(ImageResponse.CREATOR);
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
@@ -173,13 +175,14 @@ public class Photo implements Parcelable {
         this.mUser = mUser;
     }
 
-    public String getImageUrl() {
+    public List<ImageResponse> getImageUrl() {
         return mImageUrl;
     }
 
-    public void setImageUrl(String mImageUrl) {
+    public void setImageUrl(List<ImageResponse> mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
+
 
     @Override
     public int describeContents() {
@@ -200,6 +203,6 @@ public class Photo implements Parcelable {
         dest.writeInt(mFavoritesCount);
         dest.writeFloat(mHighestRating);
         dest.writeParcelable(mUser, flags);
-        dest.writeString(mImageUrl);
+        dest.writeTypedList(mImageUrl);
     }
 }

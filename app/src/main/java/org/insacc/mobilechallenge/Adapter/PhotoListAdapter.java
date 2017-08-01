@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 import org.insacc.mobilechallenge.Model.Photo;
+import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.PopularPhotos.PopularPhotosContract;
 import org.insacc.mobilechallenge.R;
 
@@ -62,17 +63,18 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         final int tempPosition = position;
         Glide
                 .with((Context) mView)
-                .load(currentPhoto.getImageUrl())
-
-
+                .load(currentPhoto.getImageUrl().get(Config.IMAGE_SIZE_20_INDEX).getHttpsUrl())
                 .into(holder.mPhotoView);
 
         holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mView.openFullScreenPhotoDialog(tempPosition);
+                mView.onImageClicked(tempPosition);
             }
         });
+
+        if (position == mPhotoList.size() - 1)
+            mView.onScrollLoadMorePhoto();
     }
 
     @Override
@@ -83,11 +85,10 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     @Override
     public double aspectRatioForIndex(int index) {
         if (index >= getItemCount()) return 1.0;
-        //return mImageAspectRatios.get(index);
+
         Photo photo = mPhotoList.get(index);
-        double result = photo.getWidth() / photo.getHeight();
-        double resultTest = (double) photo.getWidth() / (double) photo.getHeight();
-        return resultTest;
+
+        return (double) photo.getWidth() / (double) photo.getHeight();
 
 
     }

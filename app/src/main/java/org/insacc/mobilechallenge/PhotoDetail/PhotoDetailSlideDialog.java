@@ -13,6 +13,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.insacc.mobilechallenge.Adapter.PhotoDetailViewPagerAdapter;
 import org.insacc.mobilechallenge.Events.DismissDialogEvent;
+import org.insacc.mobilechallenge.Events.LoadMorePhotoEvent;
+import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
+import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment.PhotoDetailContract;
@@ -34,12 +37,15 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
 
     private static final String PHOTO_RESPONSE = "photoResponse";
     private static final String SELECTED_PHOTO_POSITION = "photoPosition";
+    private static final String SLIDER_CURRENT_POSITION = "sliderCurrPos";
 
     @BindView(R.id.full_screen_photo_view_pager)
     ViewPager mPhotoSlider;
 
 
     private PhotosResponse mPhotosResponse;
+
+    private int mSelectedPhotoPosition;
 
     private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
 
@@ -59,13 +65,29 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        extractPhotosResponse();
+        if (savedInstanceState != null) {
+            mPhotosResponse = savedInstanceState.getParcelable(PHOTO_RESPONSE);
+            mSelectedPhotoPosition = savedInstanceState.getInt(SLIDER_CURRENT_POSITION);
+        } else {
+            extractPhotosResponse();
+
+        }
+
         if (mPhotosResponse != null)
             mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getChildFragmentManager(),
                     mPhotosResponse.getPhotos(), this);
 
+
         setStyle(DialogFragment.STYLE_NORMAL, R.style.dialog_theme);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(PHOTO_RESPONSE, mPhotosResponse);
+        outState.putInt(SELECTED_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
+    }
+
 
     private void extractPhotosResponse() {
         if (getArguments() != null && getArguments().getParcelable(PHOTO_RESPONSE) != null)
@@ -83,11 +105,11 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
         if (mPhotoSliderAdapter != null)
             mPhotoSlider.setAdapter(mPhotoSliderAdapter);
 
-        int selectedPosition = 0;
-        if (getArguments() != null)
-            selectedPosition = getArguments().getInt(SELECTED_PHOTO_POSITION);
 
-        mPhotoSlider.setCurrentItem(selectedPosition);
+        if (getArguments() != null)
+            mSelectedPhotoPosition = getArguments().getInt(SELECTED_PHOTO_POSITION);
+
+        mPhotoSlider.setCurrentItem(mSelectedPhotoPosition);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -96,18 +118,32 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
 
 
     @Override
-    public void onLastImageIsDisplayed() {
+    public void broadcastLoadMorePhotos() {
+        EventBus.getDefault().post(new LoadMorePhotoEvent());
+    }
+
+    @Subscribe
+    public void onPhotosUpdateEvent(PhotosUpdatedEvent event) {
+        this.mPhotosResponse.setPhotos(event.getPhotosList());
+        updateViewPager();
 
     }
 
-    @Override
-    public void broadcastLoadMorePhotos() {
-
+    private void updateViewPager() {
+        int currentPosition = mPhotoSlider.getCurrentItem();
+        this.mPhotoSliderAdapter.notifyDataSetChanged();
+        mPhotoSlider.setCurrentItem(currentPosition);
     }
 
     @Subscribe
     public void onDismissDialogEvent(DismissDialogEvent event) {
+        sendLastPosition();
         this.dismiss();
+    }
+
+    private void sendLastPosition() {
+        int currentPosition = mPhotoSlider.getCurrentItem();
+        EventBus.getDefault().post(new ScrollToPositionEvent(currentPosition));
     }
 
     @Override

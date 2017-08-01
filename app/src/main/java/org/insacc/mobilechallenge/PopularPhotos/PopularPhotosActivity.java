@@ -9,8 +9,13 @@ import android.widget.Toast;
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
 import com.fivehundredpx.greedolayout.GreedoSpacingItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.insacc.mobilechallenge.Adapter.PhotoListAdapter;
 import org.insacc.mobilechallenge.AppModule.GetPhotosServiceModule;
+import org.insacc.mobilechallenge.Events.LoadMorePhotoEvent;
+import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
+import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.MyApplication;
@@ -28,6 +33,11 @@ import butterknife.ButterKnife;
 
 public class PopularPhotosActivity extends AppCompatActivity implements PopularPhotosContract.View {
 
+    private static final String PHOTO_RESPONSE_STATE = "photoResponseState";
+    private static final String LIST_VIEW_LAST_POSITION = "listLastPosition";
+    private static final String PAGE_COUNT_STATE = "pageCount";
+
+
     @Inject
     PopularPhotosContract.Presenter mPresenter;
 
@@ -39,6 +49,8 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private PhotoListAdapter mPhotoListAdapter;
 
     private int mPageCount = 1;
+
+    private boolean mLoadingMorePhotoFlag;
 
     private PhotosResponse mPhotosResponse;
 
@@ -53,6 +65,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
                 .getPhotosServiceModule(new GetPhotosServiceModule()).popularPhotosModule(new PopularPhotosModule(this))
                 .build().inject(this);
 
+        mLoadingMorePhotoFlag = false;
         mPhotoListAdapter = new PhotoListAdapter(this, new ArrayList<Photo>());
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
 
@@ -61,14 +74,32 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
 
         mGreedoLayoutManager.setMaxRowHeight(Util.dpToPx(300, this));
 
-        mPresenter.loadPhotos(mPageCount, getString(R.string.consumer_key));
+        if (savedInstanceState == null)
+            mPresenter.loadPhotos(mPageCount, getString(R.string.consumer_key), false);
+        else {
+            mPageCount = savedInstanceState.getInt(PAGE_COUNT_STATE);
+            mPhotosResponse = savedInstanceState.getParcelable(PHOTO_RESPONSE_STATE);
+            int lastListPosition = savedInstanceState.getInt(LIST_VIEW_LAST_POSITION);
+
+            mPhotoListAdapter.updatePhotoList(mPhotosResponse.getPhotos());
+            mGreedoLayoutManager.scrollToPosition(lastListPosition);
+        }
 
 
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(PHOTO_RESPONSE_STATE, mPhotosResponse);
+        outState.putInt(LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
+        outState.putInt(PAGE_COUNT_STATE, mPageCount);
+    }
+
+    @Override
     public void populatePhotosList(List<Photo> photos) {
         mPhotoListAdapter.updatePhotoList(photos);
+        mLoadingMorePhotoFlag = false;
     }
 
     @Override
@@ -79,17 +110,69 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
 
     @Override
     public void onImageClicked(int position) {
-
+        mPresenter.callFullScreenPhotoDialog(position);
     }
 
     @Override
     public void setPhotosResponse(PhotosResponse photosResponse) {
-        mPhotosResponse = photosResponse;
+        if (mPhotosResponse == null)
+            mPhotosResponse = photosResponse;
+        else
+            mPhotosResponse.getPhotos().addAll(photosResponse.getPhotos());
     }
 
     @Override
     public void openFullScreenPhotoDialog(int position) {
         PhotoDetailSlideDialog photoDetailSlideDialog = PhotoDetailSlideDialog.newInstance(mPhotosResponse, position);
         photoDetailSlideDialog.show(getSupportFragmentManager(), "");
+    }
+
+    @Override
+    public void onScrollLoadMorePhoto() {
+        loadMorePhotos(false);
+    }
+
+    @Override
+    public void notifySliderPhotosUpdated() {
+        EventBus.getDefault().post(new PhotosUpdatedEvent(mPhotosResponse.getPhotos()));
+    }
+
+    private void loadMorePhotos(boolean shouldNotifySlider) {
+        if (!mLoadingMorePhotoFlag) {
+            mPageCount++;
+            mPresenter.loadPhotos(mPageCount, getString(R.string.consumer_key), shouldNotifySlider);
+            mLoadingMorePhotoFlag = true;
+        }
+
+    }
+
+    @Subscribe
+    public void onPhotoSliderCloseScroll(ScrollToPositionEvent event) {
+        mGreedoLayoutManager.scrollToPosition(event.getPosition());
+
+
+    }
+
+    @Subscribe
+    public void onSliderLastItemIsDisplayed(LoadMorePhotoEvent event) {
+        loadMorePhotos(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unSubscribe();
     }
 }
