@@ -18,8 +18,10 @@ import java.util.List;
 
 public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
 
+    //The list of photos that this slider needs to display
     private List<Photo> mPhotoList;
 
+    //The slider view which contains the view pager ui object.
     private PhotoDetailSlideContract.View mView;
 
     public PhotoDetailViewPagerAdapter(FragmentManager fm, List<Photo> photos, PhotoDetailSlideContract.View view) {

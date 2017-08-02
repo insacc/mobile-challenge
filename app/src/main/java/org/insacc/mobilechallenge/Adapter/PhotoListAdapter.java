@@ -1,7 +1,7 @@
 package org.insacc.mobilechallenge.Adapter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 import org.insacc.mobilechallenge.Model.Photo;
@@ -17,7 +16,6 @@ import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.PopularPhotos.PopularPhotosContract;
 import org.insacc.mobilechallenge.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,12 +30,12 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
 
 
     private List<Photo> mPhotoList;
-    private List<Double> mImageAspectRatios;
+
 
     public PhotoListAdapter(PopularPhotosContract.View view, List<Photo> photoList) {
         this.mView = view;
         this.mPhotoList = photoList;
-        mImageAspectRatios = new ArrayList<>();
+
 
     }
 
