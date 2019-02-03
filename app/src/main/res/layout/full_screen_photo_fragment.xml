@@ -1,50 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:elevation="2dp"
-        >
-
+        android:elevation="2dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
-            android:alpha="0.2"/>
+            android:alpha="0.2"
+            android:background="@android:color/darker_gray" />
 
         <ImageButton
+            android:id="@+id/full_screen_photo_back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_keyboard_backspace_black_36dp"
-            android:id="@+id/full_screen_photo_back_btn"/>
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/ic_keyboard_backspace_black_36dp" />
 
         <TextView
+            android:id="@+id/full_screen_photo_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/full_screen_photo_back_btn"
             android:layout_marginLeft="20dp"
-            android:id="@+id/full_screen_photo_title"/>
-
-
+            android:layout_toRightOf="@+id/full_screen_photo_back_btn" />
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/full_screen_photo_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:id="@+id/full_screen_photo_item"/>
-
-
-
-
-
+        android:adjustViewBounds="true" />
 </RelativeLayout>
