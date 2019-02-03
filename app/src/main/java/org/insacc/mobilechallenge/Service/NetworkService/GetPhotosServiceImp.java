@@ -24,6 +24,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
     private ApiCall mApiCall;
     private Disposable mSubscription;
     private int mPageNumber = 1;
+    private boolean mLoading = false;
 
     public GetPhotosServiceImp(ApiCall apiCall) {
         mApiCall = apiCall;
@@ -35,9 +36,12 @@ public class GetPhotosServiceImp implements GetPhotosService {
      */
     @Override
     public void loadPhotos(final GetPhotosCallback callback) {
+        if (mLoading) return;
+
         Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, mPageNumber, 25)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
+        mLoading = true;
         getPhotos.subscribe(new Observer<List<Photo>>() {
             @Override
             public void onSubscribe(@NonNull Disposable disposable) {
@@ -46,6 +50,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
 
             @Override
             public void onNext(@NonNull List<Photo> photos) {
+                mLoading = false;
                 if (mPageNumber == 1) {
                     callback.onFirstPhotoPageLoaded(photos);
                 } else {
@@ -56,6 +61,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
 
             @Override
             public void onError(@NonNull Throwable e) {
+                mLoading = false;
                 callback.onPhotoListLoadFail();
             }
 

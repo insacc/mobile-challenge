@@ -42,8 +42,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     PopularPhotosContract.Presenter mPresenter;
     private GreedoLayoutManager mGreedoLayoutManager;
     private PhotoListAdapter mPhotoListAdapter;
-    //Flag to determine whether the network service is working to load more photos or not
-    private boolean mLoadingMorePhotoFlag;
     @BindView(R.id.popular_photo_list)
     RecyclerView mPhotosRecyclerList;
 
@@ -57,7 +55,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
                 .getPhotosServiceModule(new GetPhotosServiceModule())
                 .popularPhotosModule(new PopularPhotosModule(this))
                 .build().inject(this);
-        mLoadingMorePhotoFlag = false;
         mPhotoListAdapter = new PhotoListAdapter(this, new ArrayList<Photo>());
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
         mPhotosRecyclerList.setLayoutManager(mGreedoLayoutManager);
@@ -102,7 +99,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     public void populatePhotosList(List<Photo> photos) {
         mPhotoListAdapter.updatePhotoList(photos);
-        mLoadingMorePhotoFlag = false;
     }
 
     /**
@@ -168,10 +164,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      *                           notified when a new page of photos are fetched from the server
      */
     private void loadMorePhotos(boolean shouldNotifySlider) {
-        if (!mLoadingMorePhotoFlag) {
-            mPresenter.loadPhotos(shouldNotifySlider);
-            mLoadingMorePhotoFlag = true;
-        }
+        mPresenter.loadPhotos(shouldNotifySlider);
     }
 
     /**
