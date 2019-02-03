@@ -59,7 +59,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
         mPhotosRecyclerList.setLayoutManager(mGreedoLayoutManager);
         mPhotosRecyclerList.setAdapter(mPhotoListAdapter);
-        mGreedoLayoutManager.setMaxRowHeight(Util.dpToPx(300, this));
 
         if (savedInstanceState == null)
             mPresenter.loadPhotos(false);
