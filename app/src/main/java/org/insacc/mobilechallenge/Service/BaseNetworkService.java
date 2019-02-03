@@ -5,6 +5,5 @@ package org.insacc.mobilechallenge.Service;
  */
 
 public interface BaseNetworkService {
-
     void unSubscribe();
 }

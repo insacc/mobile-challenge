@@ -5,7 +5,6 @@ package org.insacc.mobilechallenge.Network;
  */
 
 public class Config {
-
     //Base url of the api
     public static final String BASE_URL = "https://api.500px.com/v1/";
     //Category that need to be excluded

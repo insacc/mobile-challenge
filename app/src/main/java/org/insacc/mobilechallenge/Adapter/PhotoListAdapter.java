@@ -25,32 +25,22 @@ import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoListViewHolder>
         implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate {
-
     private PopularPhotosContract.View mView;
-
-
     private List<Photo> mPhotoList;
-
 
     public PhotoListAdapter(PopularPhotosContract.View view, List<Photo> photoList) {
         this.mView = view;
         this.mPhotoList = photoList;
-
-
     }
-
 
     public void updatePhotoList(List<Photo> photos) {
         mPhotoList.addAll(photos);
         notifyDataSetChanged();
-
     }
 
     @Override
     public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_list_item, parent, false);
-
 
         return new PhotoListViewHolder(root);
     }
@@ -59,18 +49,15 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     public void onBindViewHolder(PhotoListViewHolder holder, int position) {
         Photo currentPhoto = mPhotoList.get(position);
         final int tempPosition = position;
-        Glide
-                .with((Context) mView)
+        Glide.with((Context) mView)
                 .load(currentPhoto.getImageUrl().get(Config.IMAGE_SIZE_20_INDEX).getHttpsUrl())
                 .into(holder.mPhotoView);
-
         holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mView.onImageClicked(tempPosition);
             }
         });
-
         if (position == mPhotoList.size() - 1)
             mView.onScrollLoadMorePhoto();
     }
@@ -83,24 +70,18 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     @Override
     public double aspectRatioForIndex(int index) {
         if (index >= getItemCount()) return 1.0;
-
         Photo photo = mPhotoList.get(index);
 
         return (double) photo.getWidth() / (double) photo.getHeight();
-
-
     }
 
 
     public class PhotoListViewHolder extends RecyclerView.ViewHolder {
-
         ImageView mPhotoView;
 
         public PhotoListViewHolder(View itemView) {
             super(itemView);
             mPhotoView = (ImageView) itemView;
-
-
         }
     }
 }

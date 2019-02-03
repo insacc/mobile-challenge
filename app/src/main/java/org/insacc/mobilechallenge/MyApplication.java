@@ -12,22 +12,17 @@ import org.insacc.mobilechallenge.AppModule.DaggerAppComponent;
  */
 
 public class MyApplication extends Application {
-
     private AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-
         this.mAppComponent =  DaggerAppComponent.builder()
-               .appModule(new AppModule(this))
-              .build();
+                .appModule(new AppModule(this))
+                .build();
     }
 
     public AppComponent getAppComponent() {
         return mAppComponent;
     }
-
-
 }

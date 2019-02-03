@@ -10,13 +10,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ImageResponse implements Parcelable {
-
     @SerializedName("size")
     private String mSize;
-
     @SerializedName("url")
     private String mUrl;
-
     @SerializedName("https_url")
     private String mHttpsUrl;
 

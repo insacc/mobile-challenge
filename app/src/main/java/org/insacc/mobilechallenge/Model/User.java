@@ -22,7 +22,6 @@ public class User implements Parcelable {
     private String mCity;
     @SerializedName("country")
     private String mCountry;
-
     @SerializedName("avatars")
     private AvatarResponse mAvatarUrls;
 

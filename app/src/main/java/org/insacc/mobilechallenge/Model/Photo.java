@@ -13,42 +13,32 @@ import java.util.List;
  */
 
 public class Photo implements Parcelable {
-
     @SerializedName("width")
     private long mWidth;
     @SerializedName("height")
     private long mHeight;
     @SerializedName("id")
     private long mId;
-
     @SerializedName("name")
     private String mName;
-
     @SerializedName("camera")
     private String mCamera;
-
     @SerializedName("lens")
     private String mLens;
-
     @SerializedName("times_viewed")
     private long mTimesViewed;
-
     @SerializedName("rating")
     private float mRating;
     @SerializedName("comments_count")
     private int mCommentsCount;
     @SerializedName("favorites_count")
     private int mFavoritesCount;
-
     @SerializedName("highest_rating")
     private float mHighestRating;
-
     @SerializedName("user")
     private User mUser;
-
     @SerializedName("images")
     private List<ImageResponse> mImageUrl;
-
 
     protected Photo(Parcel in) {
         mWidth = in.readLong();
@@ -93,7 +83,6 @@ public class Photo implements Parcelable {
     public void setHeight(long mHeight) {
         this.mHeight = mHeight;
     }
-
 
     public long getId() {
         return mId;
@@ -182,7 +171,6 @@ public class Photo implements Parcelable {
     public void setImageUrl(List<ImageResponse> mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
-
 
     @Override
     public int describeContents() {

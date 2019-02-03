@@ -6,7 +6,6 @@ package org.insacc.mobilechallenge.PhotoDetail;
  */
 
 public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Presenter {
-
     private PhotoDetailSlideContract.View mView;
 
     public PhotoDetailSlidePresenter(PhotoDetailSlideContract.View view) {

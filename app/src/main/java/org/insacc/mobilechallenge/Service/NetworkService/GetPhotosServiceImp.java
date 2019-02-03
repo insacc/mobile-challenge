@@ -20,10 +20,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class GetPhotosServiceImp implements GetPhotosService {
-
-
     private ApiCall mApiCall;
-
     private Disposable mSubscription;
 
     public GetPhotosServiceImp(ApiCall apiCall) {
@@ -45,7 +42,6 @@ public class GetPhotosServiceImp implements GetPhotosService {
                 consumerKey, "20,31")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
-
         getPhotos.subscribe(new Observer<PhotosResponse>() {
             @Override
             public void onSubscribe(@NonNull Disposable disposable) {
@@ -63,9 +59,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
             }
 
             @Override
-            public void onComplete() {
-
-            }
+            public void onComplete() { }
         });
     }
 

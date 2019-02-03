@@ -19,16 +19,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiWrapper {
 
-    public ApiWrapper() {
-
-    }
+    public ApiWrapper() { }
 
     public ApiCall createRetrofitObject() {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(createOkHttpClient())
                 .build();
@@ -37,16 +33,12 @@ public class ApiWrapper {
     }
 
     private OkHttpClient createOkHttpClient() {
-
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
         httpClient.connectTimeout(60, TimeUnit.SECONDS);
-
         httpClient.addInterceptor(logging);
-
 
         return httpClient.build();
     }

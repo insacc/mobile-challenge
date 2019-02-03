@@ -12,9 +12,7 @@ import java.util.List;
  */
 
 public interface PopularPhotosContract {
-
     interface View {
-
         void populatePhotosList(List<Photo> photos);
 
         void displayLoadPhotoErrorMsg();
@@ -28,18 +26,13 @@ public interface PopularPhotosContract {
         void onScrollLoadMorePhoto();
 
         void notifySliderPhotosUpdated();
-
-
     }
 
     interface Presenter {
-
         void loadPhotos(int pageNumber, String consumerKey, boolean shouldNotifySlider);
 
         void callFullScreenPhotoDialog(int position);
 
         void unSubscribe();
-
-
     }
 }

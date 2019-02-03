@@ -6,7 +6,6 @@ package org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment;
  */
 
 public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
-
     private PhotoDetailContract.View mView;
 
     public PhotoDetailPresenter(PhotoDetailContract.View view) {
@@ -20,7 +19,6 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     public void callLoadPhotoDetails() {
         mView.loadPhotoFromServer();
         mView.loadPhotoDetails();
-
     }
 
     /**

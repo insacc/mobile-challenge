@@ -11,14 +11,11 @@ import java.util.List;
  */
 
 public interface GetPhotosService extends BaseNetworkService {
-
     void getPhotos(String feature, String exclude, int pageNumber, String consumerKey, GetPhotosCallback callback);
 
     interface GetPhotosCallback {
-
         void onPhotoListLoaded(PhotosResponse photosResponse);
 
         void onPhotoListLoadFail();
-
     }
 }

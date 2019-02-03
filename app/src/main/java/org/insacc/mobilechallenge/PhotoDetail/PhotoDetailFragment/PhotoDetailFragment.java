@@ -32,39 +32,31 @@ import butterknife.ButterKnife;
  */
 
 public class PhotoDetailFragment extends Fragment implements PhotoDetailContract.View {
-
     //Tag, used to set the bundle arguments
     private static String PHOTO_DETAIL = "photoDetail";
-
     @Inject
     PhotoDetailContract.Presenter mPresenter;
-
     private Photo mPhotoDetail;
-
+    //Click listener for the buttons.
+    private View.OnClickListener mListener;
     @BindView(R.id.full_screen_photo_item)
     ImageView mFullScreenImage;
-
     @BindView(R.id.full_screen_photo_title)
     TextView mPhotoTitle;
-
     @BindView(R.id.full_screen_photo_back_btn)
     ImageButton mBackButton;
 
-    //Click listener for the buttons.
-    private View.OnClickListener mListener;
-
     /**
-     *  Creates and returns a PhotoDetailFragment object for the given Photo @param photo
+     * Creates and returns a PhotoDetailFragment object for the given Photo @param photo
+     *
      * @param photo The photo object that needs to be displayed in full screen.
      * @return the photoDetailFragment with the photo object set as Bundle argument
      */
     public static PhotoDetailFragment newInstance(Photo photo) {
-
         PhotoDetailFragment photoDetailFragment = new PhotoDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(PHOTO_DETAIL, photo);
         photoDetailFragment.setArguments(bundle);
-
 
         return photoDetailFragment;
     }
@@ -80,32 +72,27 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mListener = providesButtonListener();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.full_screen_photo_fragment, container, false);
-
-        DaggerPhotoDetailComponent.builder().appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent())
+        DaggerPhotoDetailComponent.builder()
+                .appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent())
                 .photoDetailModule(new PhotoDetailModule(this)).build().inject(this);
-
         ButterKnife.bind(this, root);
-
         mBackButton.setOnClickListener(mListener);
         getPhotoDetail();
-
         mPresenter.callLoadPhotoDetails();
-
 
         return root;
     }
 
     /**
      * Provides Click listener object for the button clicks
+     *
      * @return the click listener object which handles the back button click.
      */
     private View.OnClickListener providesButtonListener() {
@@ -113,11 +100,9 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-
                     case R.id.full_screen_photo_back_btn:
                         mPresenter.callDismiss();
                         break;
-
                 }
             }
         };
@@ -130,7 +115,6 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     @Override
     public void loadPhotoFromServer() {
         Glide.with(this)
-
                 .load(mPhotoDetail.getImageUrl().get(Config.IMAGE_SIZE_31_INDEX).getHttpsUrl())
                 .apply(RequestOptions.fitCenterTransform())
                 .into(mFullScreenImage);

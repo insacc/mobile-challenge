@@ -16,11 +16,9 @@ import dagger.Provides;
  */
 @Module
 public class AppModule {
-
     private MyApplication mApplication;
 
     public AppModule(MyApplication application) {
-
         this.mApplication = application;
     }
 
@@ -35,7 +33,4 @@ public class AppModule {
     public Context provideApplication() {
         return mApplication;
     }
-
-
-
 }

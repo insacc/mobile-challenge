@@ -11,7 +11,6 @@ import dagger.Provides;
  */
 @Module
 public class PopularPhotosModule {
-
     private PopularPhotosContract.View mView;
 
     public PopularPhotosModule(PopularPhotosContract.View view) {

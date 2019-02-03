@@ -12,22 +12,16 @@ import java.util.List;
  */
 
 public class PhotosResponse implements Parcelable {
-
     @SerializedName("current_page")
     private int mCurrentPage;
-
     @SerializedName("total_pages")
     private long mTotalPages;
-
     @SerializedName("total_items")
     private long mTotalItems;
-
     @SerializedName("photos")
     private List<Photo> mPhotos;
-
     @SerializedName("feature")
     private String mFeature;
-
 
     protected PhotosResponse(Parcel in) {
         mCurrentPage = in.readInt();

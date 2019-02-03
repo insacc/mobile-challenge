@@ -32,34 +32,26 @@ import butterknife.ButterKnife;
  */
 
 public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetailSlideContract.View {
-    @Inject
-    PhotoDetailSlideContract.Presenter mPresenter;
-
     //Tags, used to save the state of the activity
     private static final String PHOTO_RESPONSE = "photoResponse";
     private static final String SELECTED_PHOTO_POSITION = "photoPosition";
     private static final String SLIDER_CURRENT_POSITION = "sliderCurrPos";
-
-
+    @Inject
+    PhotoDetailSlideContract.Presenter mPresenter;
+    //Server response object which contains the list of photos
+    private PhotosResponse mPhotosResponse;
+    //Position of the image that is selected by the user to open it in full screen.
+    private int mSelectedPhotoPosition;
+    private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
     @BindView(R.id.full_screen_photo_view_pager)
     ViewPager mPhotoSlider;
 
-    //Server response object which contains the list of photos
-    private PhotosResponse mPhotosResponse;
-
-    //Position of the image that is selected by the user to open it in full screen.
-    private int mSelectedPhotoPosition;
-
-    private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
-
     /**
-     *
      * @param photosResponse the server response object that contains the list of photos
-     * @param photoPosition the position of the image that is selected by the user
+     * @param photoPosition  the position of the image that is selected by the user
      * @return An instance of this view with arguments @param photosResponse and @param photoPosition
      */
     public static PhotoDetailSlideDialog newInstance(PhotosResponse photosResponse, int photoPosition) {
-
         PhotoDetailSlideDialog photoDetailSlideDialog = new PhotoDetailSlideDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable(PHOTO_RESPONSE, photosResponse);
@@ -67,8 +59,6 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
         photoDetailSlideDialog.setArguments(bundle);
 
         return photoDetailSlideDialog;
-
-
     }
 
     @Override
@@ -79,20 +69,17 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
             mSelectedPhotoPosition = savedInstanceState.getInt(SLIDER_CURRENT_POSITION);
         } else {
             extractPhotosResponse();
-
         }
-
         if (mPhotosResponse != null)
             mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getChildFragmentManager(),
                     mPhotosResponse.getPhotos(), this);
-
-
         setStyle(DialogFragment.STYLE_NORMAL, R.style.dialog_theme);
     }
 
     /**
      * Saves the current position of the image and the  server response object, when the screen orientation
      * is changed by the user.
+     *
      * @param outState the object that saves the current state of the dialog fragment
      *                 when the screen orientation is changed.
      */
@@ -118,16 +105,11 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
         DaggerPhotoDetailSlideViewComponent.builder().appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent())
                 .photoDetailSlideModule(new PhotoDetailSlideModule(this)).build().inject(this);
         ButterKnife.bind(this, root);
-
         if (mPhotoSliderAdapter != null)
             mPhotoSlider.setAdapter(mPhotoSliderAdapter);
-
-
         if (getArguments() != null)
             mSelectedPhotoPosition = getArguments().getInt(SELECTED_PHOTO_POSITION);
-
         mPhotoSlider.setCurrentItem(mSelectedPhotoPosition);
-
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         return root;
@@ -153,19 +135,18 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     /**
      * Called when a new page of photos are fetched from the server and when this slider
      * needs to be updated.
+     *
      * @param event The event object that contains the new list of photos.
      */
     @Subscribe
     public void onPhotosUpdateEvent(PhotosUpdatedEvent event) {
         this.mPhotosResponse.setPhotos(event.getPhotosList());
         updateViewPager();
-
     }
 
     /**
      * Updates the view pager adapter with the new list of photos and displays the  last image
      * the user saw.
-     *
      */
     private void updateViewPager() {
         int currentPosition = mPhotoSlider.getCurrentItem();
@@ -176,6 +157,7 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     /**
      * Called when the user clicks on the back button on the slider. Broadcast the  position of the last
      * image the user saw, so that the recycler view list can be scrolled to that image.
+     *
      * @param event the event object to indicate that the dialog needs to be dismissed.
      */
     @Subscribe
@@ -204,6 +186,4 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
-
-
 }

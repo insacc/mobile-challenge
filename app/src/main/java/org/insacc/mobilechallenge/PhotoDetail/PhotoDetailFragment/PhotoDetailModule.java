@@ -10,7 +10,6 @@ import dagger.Provides;
  */
 @Module
 public class PhotoDetailModule {
-
     private PhotoDetailContract.View mView;
 
     public PhotoDetailModule(PhotoDetailContract.View view) {

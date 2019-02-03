@@ -12,6 +12,5 @@ import dagger.Component;
 @CustomScope
 @Component(modules = {PopularPhotosModule.class, GetPhotosServiceModule.class}, dependencies = AppComponent.class)
 public interface PopularPhotosComponent {
-
     void inject(PopularPhotosActivity activity);
 }

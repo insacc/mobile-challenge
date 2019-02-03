@@ -9,7 +9,6 @@ import java.util.List;
  */
 
 public class PhotosUpdatedEvent {
-
     private List<Photo> mPhotosList;
 
     public PhotosUpdatedEvent(List<Photo> photoList) {

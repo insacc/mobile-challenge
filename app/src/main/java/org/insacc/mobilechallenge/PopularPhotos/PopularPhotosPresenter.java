@@ -12,16 +12,11 @@ import java.util.List;
  */
 
 public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, GetPhotosService.GetPhotosCallback {
-
-
     private PopularPhotosContract.View mView;
-
     //Network service class
     private GetPhotosService mGetPhotosService;
-
     //Flag to indicate whether the slider needs to be notified when new photos are fetched.
     private boolean mShouldNotifySlider;
-
 
     public PopularPhotosPresenter(PopularPhotosContract.View view, GetPhotosService getPhotosService) {
         this.mView = view;
@@ -37,12 +32,9 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
      */
     @Override
     public void loadPhotos(int pageNumber, String consumerKey, boolean shouldNotifySlider) {
-
         mShouldNotifySlider = shouldNotifySlider;
         mGetPhotosService.getPhotos(Config.FEATURE_CATEGORY, Config.EXCLUDE_CATEGORY, pageNumber,
                 consumerKey, this);
-
-
     }
 
     /**
@@ -74,7 +66,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mView.setPhotosResponse(photosResponse);
         if (mShouldNotifySlider)
             mView.notifySliderPhotosUpdated();
-
         mShouldNotifySlider = false;
     }
 

@@ -5,7 +5,6 @@ package org.insacc.mobilechallenge.Events;
  */
 
 public class ScrollToPositionEvent {
-
     private int mPosition;
 
     public ScrollToPositionEvent(int position) {

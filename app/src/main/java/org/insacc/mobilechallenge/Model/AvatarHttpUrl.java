@@ -10,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class AvatarHttpUrl implements Parcelable {
-
     @SerializedName("https")
     private String mUrl;
 

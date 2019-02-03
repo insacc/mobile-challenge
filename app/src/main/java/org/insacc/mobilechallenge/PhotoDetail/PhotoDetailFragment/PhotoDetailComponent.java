@@ -11,6 +11,5 @@ import dagger.Component;
 @CustomScope
 @Component(modules = PhotoDetailModule.class, dependencies = AppComponent.class)
 public interface PhotoDetailComponent {
-
     void inject(PhotoDetailFragment fragment);
 }

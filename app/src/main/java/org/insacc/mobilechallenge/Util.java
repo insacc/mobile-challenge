@@ -8,7 +8,6 @@ import android.util.TypedValue;
  */
 
 public class Util {
-
     /**
      * Converts the given dp value @param dp to pixel value.
      * @param dp dp value which needs to be converted to pixel value.
