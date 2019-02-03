@@ -35,10 +35,11 @@ import butterknife.ButterKnife;
  */
 
 public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetailSlideContract.View {
+    private static final String CLASS_NAME = PhotoDetailSlideDialog.class.getName();
     //Tags, used to save the state of the activity
-    private static final String PHOTO_RESPONSE = "photoResponse";
-    private static final String SELECTED_PHOTO_POSITION = "photoPosition";
-    private static final String SLIDER_CURRENT_POSITION = "sliderCurrPos";
+    private static final String ARG_KEY_PHOTOS_LIST = CLASS_NAME + ".photoResponse";
+    private static final String ARG_KEY_SELECTED_PHOTO_POSITION = CLASS_NAME + ".photoPosition";
+    private static final String ARG_KEY_SLIDER_CURRENT_POSITION = CLASS_NAME + ".sliderCurrPos";
     @Inject
     PhotoDetailSlideContract.Presenter mPresenter;
     //Server response object which contains the list of photos
@@ -57,8 +58,8 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     public static PhotoDetailSlideDialog newInstance(List<Photo> photosList, int photoPosition) {
         PhotoDetailSlideDialog photoDetailSlideDialog = new PhotoDetailSlideDialog();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(PHOTO_RESPONSE, (ArrayList<? extends Parcelable>) photosList);
-        bundle.putInt(SELECTED_PHOTO_POSITION, photoPosition);
+        bundle.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>) photosList);
+        bundle.putInt(ARG_KEY_SELECTED_PHOTO_POSITION, photoPosition);
         photoDetailSlideDialog.setArguments(bundle);
 
         return photoDetailSlideDialog;
@@ -68,8 +69,8 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mPhotosList = savedInstanceState.getParcelableArrayList(PHOTO_RESPONSE);
-            mSelectedPhotoPosition = savedInstanceState.getInt(SLIDER_CURRENT_POSITION);
+            mPhotosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
+            mSelectedPhotoPosition = savedInstanceState.getInt(ARG_KEY_SLIDER_CURRENT_POSITION);
         } else {
             extractPhotosResponse();
         }
@@ -89,16 +90,16 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(PHOTO_RESPONSE, (ArrayList<? extends Parcelable>) mPhotosList);
-        outState.putInt(SELECTED_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
+        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>) mPhotosList);
+        outState.putInt(ARG_KEY_SELECTED_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
     }
 
     /**
      * Extracts the server response object from the arguments and sets it.
      */
     private void extractPhotosResponse() {
-        if (getArguments() != null && getArguments().getParcelableArrayList(PHOTO_RESPONSE) != null) {
-            mPhotosList = getArguments().getParcelableArrayList(PHOTO_RESPONSE);
+        if (getArguments() != null && getArguments().getParcelableArrayList(ARG_KEY_PHOTOS_LIST) != null) {
+            mPhotosList = getArguments().getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
         }
     }
 
@@ -112,7 +113,7 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
         if (mPhotoSliderAdapter != null)
             mPhotoSlider.setAdapter(mPhotoSliderAdapter);
         if (getArguments() != null)
-            mSelectedPhotoPosition = getArguments().getInt(SELECTED_PHOTO_POSITION);
+            mSelectedPhotoPosition = getArguments().getInt(ARG_KEY_SELECTED_PHOTO_POSITION);
         mPhotoSlider.setCurrentItem(mSelectedPhotoPosition);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 

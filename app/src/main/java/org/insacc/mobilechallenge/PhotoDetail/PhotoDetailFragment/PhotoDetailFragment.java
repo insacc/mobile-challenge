@@ -31,8 +31,9 @@ import butterknife.ButterKnife;
  */
 
 public class PhotoDetailFragment extends Fragment implements PhotoDetailContract.View {
+    private static final String CLASS_NAME = PhotoDetailFragment.class.getName();
     //Tag, used to set the bundle arguments
-    private static String PHOTO_DETAIL = "photoDetail";
+    private static final String ARG_KEY_PHOTO_DETAIL = CLASS_NAME + ".photoDetail";
     @Inject
     PhotoDetailContract.Presenter mPresenter;
     private Photo mPhotoDetail;
@@ -54,7 +55,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     public static PhotoDetailFragment newInstance(Photo photo) {
         PhotoDetailFragment photoDetailFragment = new PhotoDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PHOTO_DETAIL, photo);
+        bundle.putParcelable(ARG_KEY_PHOTO_DETAIL, photo);
         photoDetailFragment.setArguments(bundle);
 
         return photoDetailFragment;
@@ -64,8 +65,8 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
      * Extracts the details of the photo from the fragment bundle.
      */
     private void getPhotoDetail() {
-        if (getArguments() != null && getArguments().getParcelable(PHOTO_DETAIL) != null)
-            mPhotoDetail = getArguments().getParcelable(PHOTO_DETAIL);
+        if (getArguments() != null && getArguments().getParcelable(ARG_KEY_PHOTO_DETAIL) != null)
+            mPhotoDetail = getArguments().getParcelable(ARG_KEY_PHOTO_DETAIL);
     }
 
     @Override

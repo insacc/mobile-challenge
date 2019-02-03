@@ -34,9 +34,10 @@ import butterknife.ButterKnife;
  */
 public class PopularPhotosActivity extends AppCompatActivity implements PopularPhotosContract.View {
     //Tags, used to save the state of the activity
-    private static final String PHOTO_RESPONSE_STATE = "photoResponseState";
-    private static final String LIST_VIEW_LAST_POSITION = "listLastPosition";
-    private static final String PAGE_COUNT_STATE = "pageCount";
+    private static final String CLASS_NAME = PopularPhotosActivity.class.getName();
+    private static final String ARG_KEY_PHOTOS_LIST = CLASS_NAME + ".photosList";
+    private static final String ARG_KEY_LIST_VIEW_LAST_POSITION = CLASS_NAME + "listLastPosition";
+    private static final String ARG_KEY_PAGE_COUNT = CLASS_NAME + "pageCount";
     @Inject
     PopularPhotosContract.Presenter mPresenter;
     private GreedoLayoutManager mGreedoLayoutManager;
@@ -68,10 +69,10 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         if (savedInstanceState == null)
             mPresenter.loadPhotos(mPageCount, false);
         else {
-            mPageCount = savedInstanceState.getInt(PAGE_COUNT_STATE);
-            List<Photo> photosList = savedInstanceState.getParcelableArrayList(PHOTO_RESPONSE_STATE);
+            mPageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
+            List<Photo> photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
             mPresenter.setPhotosList(photosList);
-            int lastListPosition = savedInstanceState.getInt(LIST_VIEW_LAST_POSITION);
+            int lastListPosition = savedInstanceState.getInt(ARG_KEY_LIST_VIEW_LAST_POSITION);
             mPhotoListAdapter.updatePhotoList(photosList);
             mGreedoLayoutManager.scrollToPosition(lastListPosition);
         }
@@ -88,9 +89,9 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(PHOTO_RESPONSE_STATE, mPresenter.getPhotosList());
-        outState.putInt(LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
-        outState.putInt(PAGE_COUNT_STATE, mPageCount);
+        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, mPresenter.getPhotosList());
+        outState.putInt(ARG_KEY_LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
+        outState.putInt(ARG_KEY_PAGE_COUNT, mPageCount);
     }
 
     /**
