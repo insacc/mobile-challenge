@@ -11,14 +11,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
     @SerializedName("id")
-    private long mID;
+    private String mID;
     @SerializedName("username")
     private String mUserName;
     @SerializedName("name")
     private String mName;
 
     protected User(Parcel in) {
-        mID = in.readLong();
+        mID = in.readString();
         mUserName = in.readString();
         mName = in.readString();
     }
@@ -35,11 +35,11 @@ public class User implements Parcelable {
         }
     };
 
-    public long getID() {
+    public String getID() {
         return mID;
     }
 
-    public void setID(long mID) {
+    public void setID(String mID) {
         this.mID = mID;
     }
 
@@ -66,7 +66,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mID);
+        dest.writeString(mID);
         dest.writeString(mUserName);
         dest.writeString(mName);
     }

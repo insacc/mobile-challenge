@@ -16,7 +16,7 @@ public class Photo implements Parcelable {
     @SerializedName("height")
     private long mHeight;
     @SerializedName("id")
-    private long mId;
+    private String mId;
     @SerializedName("description")
     private String mDescription;
     @SerializedName("user")
@@ -27,7 +27,7 @@ public class Photo implements Parcelable {
     protected Photo(Parcel in) {
         mWidth = in.readLong();
         mHeight = in.readLong();
-        mId = in.readLong();
+        mId = in.readString();
         mDescription = in.readString();
         mUser = in.readParcelable(User.class.getClassLoader());
         mImageUrl = in.readParcelable(PhotoLinks.class.getClassLoader());
@@ -61,11 +61,11 @@ public class Photo implements Parcelable {
         this.mHeight = mHeight;
     }
 
-    public long getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(long mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 
@@ -102,7 +102,7 @@ public class Photo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mWidth);
         dest.writeLong(mHeight);
-        dest.writeLong(mId);
+        dest.writeString(mId);
         dest.writeString(mDescription);
         dest.writeParcelable(mUser, flags);
         dest.writeParcelable(mImageUrl, flags);
