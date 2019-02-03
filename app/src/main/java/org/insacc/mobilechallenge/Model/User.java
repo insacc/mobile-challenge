@@ -14,25 +14,13 @@ public class User implements Parcelable {
     private long mID;
     @SerializedName("username")
     private String mUserName;
-    @SerializedName("firstname")
-    private String mFirstName;
-    @SerializedName("lastname")
-    private String mLastName;
-    @SerializedName("city")
-    private String mCity;
-    @SerializedName("country")
-    private String mCountry;
-    @SerializedName("avatars")
-    private AvatarResponse mAvatarUrls;
+    @SerializedName("name")
+    private String mName;
 
     protected User(Parcel in) {
         mID = in.readLong();
         mUserName = in.readString();
-        mFirstName = in.readString();
-        mLastName = in.readString();
-        mCity = in.readString();
-        mCountry = in.readString();
-        mAvatarUrls = in.readParcelable(AvatarResponse.class.getClassLoader());
+        mName = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -63,44 +51,12 @@ public class User implements Parcelable {
         this.mUserName = mUserName;
     }
 
-    public String getFirstName() {
-        return mFirstName;
+    public String getName() {
+        return mName;
     }
 
-    public void setFirstName(String mFirstName) {
-        this.mFirstName = mFirstName;
-    }
-
-    public String getLastName() {
-        return mLastName;
-    }
-
-    public void setLastName(String mLastName) {
-        this.mLastName = mLastName;
-    }
-
-    public String getCity() {
-        return mCity;
-    }
-
-    public void setCity(String mCity) {
-        this.mCity = mCity;
-    }
-
-    public String getCountry() {
-        return mCountry;
-    }
-
-    public void setCountry(String mCountry) {
-        this.mCountry = mCountry;
-    }
-
-    public AvatarResponse getAvatarUrls() {
-        return mAvatarUrls;
-    }
-
-    public void setAvatarUrls(AvatarResponse mAvatarUrls) {
-        this.mAvatarUrls = mAvatarUrls;
+    public void setName(String name) {
+        this.mName = name;
     }
 
     @Override
@@ -112,10 +68,6 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mID);
         dest.writeString(mUserName);
-        dest.writeString(mFirstName);
-        dest.writeString(mLastName);
-        dest.writeString(mCity);
-        dest.writeString(mCountry);
-        dest.writeParcelable(mAvatarUrls, flags);
+        dest.writeString(mName);
     }
 }
