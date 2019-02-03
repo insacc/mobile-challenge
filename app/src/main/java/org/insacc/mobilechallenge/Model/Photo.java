@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by can on 31.07.2017.
  * Model class which represents a photo object.
@@ -19,41 +17,20 @@ public class Photo implements Parcelable {
     private long mHeight;
     @SerializedName("id")
     private long mId;
-    @SerializedName("name")
-    private String mName;
-    @SerializedName("camera")
-    private String mCamera;
-    @SerializedName("lens")
-    private String mLens;
-    @SerializedName("times_viewed")
-    private long mTimesViewed;
-    @SerializedName("rating")
-    private float mRating;
-    @SerializedName("comments_count")
-    private int mCommentsCount;
-    @SerializedName("favorites_count")
-    private int mFavoritesCount;
-    @SerializedName("highest_rating")
-    private float mHighestRating;
+    @SerializedName("description")
+    private String mDescription;
     @SerializedName("user")
     private User mUser;
-    @SerializedName("images")
-    private List<ImageResponse> mImageUrl;
+    @SerializedName("urls")
+    private PhotoLinks mImageUrl;
 
     protected Photo(Parcel in) {
         mWidth = in.readLong();
         mHeight = in.readLong();
         mId = in.readLong();
-        mName = in.readString();
-        mCamera = in.readString();
-        mLens = in.readString();
-        mTimesViewed = in.readLong();
-        mRating = in.readFloat();
-        mCommentsCount = in.readInt();
-        mFavoritesCount = in.readInt();
-        mHighestRating = in.readFloat();
+        mDescription = in.readString();
         mUser = in.readParcelable(User.class.getClassLoader());
-        mImageUrl = in.createTypedArrayList(ImageResponse.CREATOR);
+        mImageUrl = in.readParcelable(PhotoLinks.class.getClassLoader());
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
@@ -92,68 +69,12 @@ public class Photo implements Parcelable {
         this.mId = mId;
     }
 
-    public String getName() {
-        return mName;
+    public String getDescription() {
+        return mDescription;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
-    }
-
-    public String getCamera() {
-        return mCamera;
-    }
-
-    public void setCamera(String mCamera) {
-        this.mCamera = mCamera;
-    }
-
-    public String getLens() {
-        return mLens;
-    }
-
-    public void setLens(String mLens) {
-        this.mLens = mLens;
-    }
-
-    public long getTimesViewed() {
-        return mTimesViewed;
-    }
-
-    public void setTimesViewed(long mTimesViewed) {
-        this.mTimesViewed = mTimesViewed;
-    }
-
-    public float getRating() {
-        return mRating;
-    }
-
-    public void setRating(float mRating) {
-        this.mRating = mRating;
-    }
-
-    public int getCommentsCount() {
-        return mCommentsCount;
-    }
-
-    public void setCommentsCount(int mCommentsCount) {
-        this.mCommentsCount = mCommentsCount;
-    }
-
-    public int getFavoritesCount() {
-        return mFavoritesCount;
-    }
-
-    public void setmFavoritesCount(int mFavoritesCount) {
-        this.mFavoritesCount = mFavoritesCount;
-    }
-
-    public float getmHighestRating() {
-        return mHighestRating;
-    }
-
-    public void setmHighestRating(float mHighestRating) {
-        this.mHighestRating = mHighestRating;
+    public void setDescription(String mDescription) {
+        this.mDescription = mDescription;
     }
 
     public User getmUser() {
@@ -164,11 +85,11 @@ public class Photo implements Parcelable {
         this.mUser = mUser;
     }
 
-    public List<ImageResponse> getImageUrl() {
+    public PhotoLinks getImageUrl() {
         return mImageUrl;
     }
 
-    public void setImageUrl(List<ImageResponse> mImageUrl) {
+    public void setImageUrl(PhotoLinks mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
 
@@ -182,15 +103,8 @@ public class Photo implements Parcelable {
         dest.writeLong(mWidth);
         dest.writeLong(mHeight);
         dest.writeLong(mId);
-        dest.writeString(mName);
-        dest.writeString(mCamera);
-        dest.writeString(mLens);
-        dest.writeLong(mTimesViewed);
-        dest.writeFloat(mRating);
-        dest.writeInt(mCommentsCount);
-        dest.writeInt(mFavoritesCount);
-        dest.writeFloat(mHighestRating);
+        dest.writeString(mDescription);
         dest.writeParcelable(mUser, flags);
-        dest.writeTypedList(mImageUrl);
+        dest.writeParcelable(mImageUrl, flags);
     }
 }
