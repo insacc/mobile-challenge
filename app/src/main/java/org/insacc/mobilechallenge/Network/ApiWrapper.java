@@ -1,7 +1,5 @@
 package org.insacc.mobilechallenge.Network;
 
-import android.util.Log;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;

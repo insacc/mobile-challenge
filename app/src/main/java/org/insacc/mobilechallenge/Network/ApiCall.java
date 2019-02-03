@@ -1,9 +1,6 @@
 package org.insacc.mobilechallenge.Network;
 
-import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.Model.PhotosResponse;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

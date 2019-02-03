@@ -1,11 +1,8 @@
 package org.insacc.mobilechallenge.PopularPhotos;
 
-
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.Service.NetworkService.GetPhotosService;
-
-import java.util.List;
 
 /**
  * Created by can on 31.07.2017.

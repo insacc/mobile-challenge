@@ -1,6 +1,5 @@
 package org.insacc.mobilechallenge.Service.NetworkService;
 
-
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.Network.ApiCall;
 
@@ -11,7 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
 
 /**
  * Created by can on 31.07.2017.

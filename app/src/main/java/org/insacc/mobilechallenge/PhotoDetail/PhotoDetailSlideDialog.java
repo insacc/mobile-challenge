@@ -18,7 +18,6 @@ import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
 import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.MyApplication;
-import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment.PhotoDetailContract;
 import org.insacc.mobilechallenge.R;
 
 import javax.inject.Inject;
