@@ -25,14 +25,13 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
 
     /**
      * Using the network service object this method loads photos from the server
-     * @param pageNumber the page number that needs to fetched from the server
      * @param shouldNotifySlider Flag to indicate whether the slider needs to be notified
      *                           when new photos are fetched.
      */
     @Override
-    public void loadPhotos(int pageNumber, boolean shouldNotifySlider) {
+    public void loadPhotos(boolean shouldNotifySlider) {
         mShouldNotifySlider = shouldNotifySlider;
-        mGetPhotosService.getPhotos(pageNumber, this);
+        mGetPhotosService.loadPhotos(this);
     }
 
     /**
@@ -58,15 +57,35 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.unSubscribe();
     }
 
+    @Override
+    public int getCurrentPageNumber() {
+        return mGetPhotosService.getCurrentPageNumber();
+    }
+
+    @Override
+    public void setCurrentPageNumber(int pageNumber) {
+        mGetPhotosService.setCurrentPageNumber(pageNumber);
+    }
+
     /**
      * Called when the photos are fetched from the server. Populates the recycler view list adapter
      * and notifies the slider view depending on the flag.
      * @param photosResponse the server response object that is fetched from the server
      */
     @Override
-    public void onPhotoListLoaded(List<Photo> photosResponse) {
+    public void onFirstPhotoPageLoaded(List<Photo> photosResponse) {
         setPhotosList(photosResponse);
         mView.populatePhotosList(photosResponse);
+        if (mShouldNotifySlider)
+            mView.notifySliderPhotosUpdated();
+        mShouldNotifySlider = false;
+    }
+
+    // TODO handle refresh and next page loads separately
+    @Override
+    public void onNextPhotoPageLoaded(List<Photo> photosList) {
+        setPhotosList(photosList);
+        mView.populatePhotosList(photosList);
         if (mShouldNotifySlider)
             mView.notifySliderPhotosUpdated();
         mShouldNotifySlider = false;

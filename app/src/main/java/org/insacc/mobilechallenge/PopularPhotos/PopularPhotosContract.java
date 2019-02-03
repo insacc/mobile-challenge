@@ -27,7 +27,7 @@ public interface PopularPhotosContract {
     }
 
     interface Presenter {
-        void loadPhotos(int pageNumber, boolean shouldNotifySlider);
+        void loadPhotos(boolean shouldNotifySlider);
 
         void callFullScreenPhotoDialog(int position);
 
@@ -36,5 +36,9 @@ public interface PopularPhotosContract {
         void setPhotosList(List<Photo> photosList);
 
         void unSubscribe();
+
+        int getCurrentPageNumber();
+
+        void setCurrentPageNumber(int pageNumber);
     }
 }

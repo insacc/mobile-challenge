@@ -23,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 public class GetPhotosServiceImp implements GetPhotosService {
     private ApiCall mApiCall;
     private Disposable mSubscription;
+    private int mPageNumber = 1;
 
     public GetPhotosServiceImp(ApiCall apiCall) {
         mApiCall = apiCall;
@@ -30,12 +31,11 @@ public class GetPhotosServiceImp implements GetPhotosService {
 
     /**
      * Fetches the photos from the server using the parameters declared.
-     * @param pageNumber the page number which needs to be fetched from the server
      * @param callback the callback which will be called once the network request is done.
      */
     @Override
-    public void getPhotos(int pageNumber, final GetPhotosCallback callback) {
-        Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, pageNumber, 25)
+    public void loadPhotos(final GetPhotosCallback callback) {
+        Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, mPageNumber, 25)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
         getPhotos.subscribe(new Observer<List<Photo>>() {
@@ -46,7 +46,12 @@ public class GetPhotosServiceImp implements GetPhotosService {
 
             @Override
             public void onNext(@NonNull List<Photo> photos) {
-                callback.onPhotoListLoaded(photos);
+                if (mPageNumber == 1) {
+                    callback.onFirstPhotoPageLoaded(photos);
+                } else {
+                    callback.onNextPhotoPageLoaded(photos);
+                }
+                mPageNumber++;
             }
 
             @Override
@@ -57,6 +62,16 @@ public class GetPhotosServiceImp implements GetPhotosService {
             @Override
             public void onComplete() { }
         });
+    }
+
+    @Override
+    public int getCurrentPageNumber() {
+        return mPageNumber;
+    }
+
+    @Override
+    public void setCurrentPageNumber(int pageNumber) {
+        mPageNumber = pageNumber;
     }
 
     /**

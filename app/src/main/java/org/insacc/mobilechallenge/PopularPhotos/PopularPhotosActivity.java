@@ -42,8 +42,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     PopularPhotosContract.Presenter mPresenter;
     private GreedoLayoutManager mGreedoLayoutManager;
     private PhotoListAdapter mPhotoListAdapter;
-    //Pagination current page count
-    private int mPageCount = 1;
     //Flag to determine whether the network service is working to load more photos or not
     private boolean mLoadingMorePhotoFlag;
     @BindView(R.id.popular_photo_list)
@@ -67,9 +65,10 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mGreedoLayoutManager.setMaxRowHeight(Util.dpToPx(300, this));
 
         if (savedInstanceState == null)
-            mPresenter.loadPhotos(mPageCount, false);
+            mPresenter.loadPhotos(false);
         else {
-            mPageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
+            int pageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
+            mPresenter.setCurrentPageNumber(pageCount);
             List<Photo> photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
             mPresenter.setPhotosList(photosList);
             int lastListPosition = savedInstanceState.getInt(ARG_KEY_LIST_VIEW_LAST_POSITION);
@@ -91,7 +90,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, mPresenter.getPhotosList());
         outState.putInt(ARG_KEY_LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
-        outState.putInt(ARG_KEY_PAGE_COUNT, mPageCount);
+        outState.putInt(ARG_KEY_PAGE_COUNT, mPresenter.getCurrentPageNumber());
     }
 
     /**
@@ -170,8 +169,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     private void loadMorePhotos(boolean shouldNotifySlider) {
         if (!mLoadingMorePhotoFlag) {
-            mPageCount++;
-            mPresenter.loadPhotos(mPageCount, shouldNotifySlider);
+            mPresenter.loadPhotos(shouldNotifySlider);
             mLoadingMorePhotoFlag = true;
         }
     }

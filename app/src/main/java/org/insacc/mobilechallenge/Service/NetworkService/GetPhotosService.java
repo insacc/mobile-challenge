@@ -10,10 +10,16 @@ import java.util.List;
  */
 
 public interface GetPhotosService extends BaseNetworkService {
-    void getPhotos(int pageNumber, GetPhotosCallback callback);
+    void loadPhotos(GetPhotosCallback callback);
+
+    int getCurrentPageNumber();
+
+    void setCurrentPageNumber(int pageNumber);
 
     interface GetPhotosCallback {
-        void onPhotoListLoaded(List<Photo> photosResponse);
+        void onFirstPhotoPageLoaded(List<Photo> photosResponse);
+
+        void onNextPhotoPageLoaded(List<Photo> photosList);
 
         void onPhotoListLoadFail();
     }
