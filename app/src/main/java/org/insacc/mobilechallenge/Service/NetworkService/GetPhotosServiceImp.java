@@ -1,7 +1,10 @@
 package org.insacc.mobilechallenge.Service.NetworkService;
 
-import org.insacc.mobilechallenge.Model.PhotosResponse;
+import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.Network.ApiCall;
+import org.insacc.mobilechallenge.Network.Config;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -27,27 +30,22 @@ public class GetPhotosServiceImp implements GetPhotosService {
 
     /**
      * Fetches the photos from the server using the parameters declared.
-     * @param feature the feature category of the photos that will be fetched from server
-     * @param excludeCategory the category that needs to be excluded from the server response.
      * @param pageNumber the page number which needs to be fetched from the server
-     * @param consumerKey the consumer key to be able to connect to the server
      * @param callback the callback which will be called once the network request is done.
      */
     @Override
-    public void getPhotos(String feature, String excludeCategory, int pageNumber, String consumerKey,
-                          final GetPhotosCallback callback) {
-        Observable<PhotosResponse> getPhotos = mApiCall.getPhotos(feature, excludeCategory, pageNumber,
-                consumerKey, "20,31")
+    public void getPhotos(int pageNumber, final GetPhotosCallback callback) {
+        Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, pageNumber, 25)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
-        getPhotos.subscribe(new Observer<PhotosResponse>() {
+        getPhotos.subscribe(new Observer<List<Photo>>() {
             @Override
             public void onSubscribe(@NonNull Disposable disposable) {
                 mSubscription = disposable;
             }
 
             @Override
-            public void onNext(@NonNull PhotosResponse photos) {
+            public void onNext(@NonNull List<Photo> photos) {
                 callback.onPhotoListLoaded(photos);
             }
 

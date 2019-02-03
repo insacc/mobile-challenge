@@ -16,7 +16,6 @@ import org.insacc.mobilechallenge.Events.LoadMorePhotoEvent;
 import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
 import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.Photo;
-import org.insacc.mobilechallenge.Model.PhotosResponse;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailSlideDialog;
 import org.insacc.mobilechallenge.R;
@@ -46,8 +45,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private int mPageCount = 1;
     //Flag to determine whether the network service is working to load more photos or not
     private boolean mLoadingMorePhotoFlag;
-    //Server response object
-    private PhotosResponse mPhotosResponse;
     @BindView(R.id.popular_photo_list)
     RecyclerView mPhotosRecyclerList;
 
@@ -69,12 +66,13 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mGreedoLayoutManager.setMaxRowHeight(Util.dpToPx(300, this));
 
         if (savedInstanceState == null)
-            mPresenter.loadPhotos(mPageCount, getString(R.string.consumer_key), false);
+            mPresenter.loadPhotos(mPageCount, false);
         else {
             mPageCount = savedInstanceState.getInt(PAGE_COUNT_STATE);
-            mPhotosResponse = savedInstanceState.getParcelable(PHOTO_RESPONSE_STATE);
+            List<Photo> photosList = savedInstanceState.getParcelableArrayList(PHOTO_RESPONSE_STATE);
+            mPresenter.setPhotosList(photosList);
             int lastListPosition = savedInstanceState.getInt(LIST_VIEW_LAST_POSITION);
-            mPhotoListAdapter.updatePhotoList(mPhotosResponse.getPhotos());
+            mPhotoListAdapter.updatePhotoList(photosList);
             mGreedoLayoutManager.scrollToPosition(lastListPosition);
         }
     }
@@ -90,7 +88,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(PHOTO_RESPONSE_STATE, mPhotosResponse);
+        outState.putParcelableArrayList(PHOTO_RESPONSE_STATE, mPresenter.getPhotosList());
         outState.putInt(LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
         outState.putInt(PAGE_COUNT_STATE, mPageCount);
     }
@@ -129,23 +127,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     }
 
     /**
-     * Sets or updates the server response object depending
-     * on whether the server response obj already
-     * declared or not.
-     *
-     * @param photosResponse the wrapper object for the
-     *                       server response object
-     */
-    @Override
-    public void setPhotosResponse(PhotosResponse photosResponse) {
-        if (mPhotosResponse == null) {
-            mPhotosResponse = photosResponse;
-        } else {
-            mPhotosResponse.getPhotos().addAll(photosResponse.getPhotos());
-        }
-    }
-
-    /**
      * Opens the dialog fragment to display the selected
      * image in fullscreen.
      *
@@ -154,7 +135,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     public void openFullScreenPhotoDialog(int position) {
         PhotoDetailSlideDialog photoDetailSlideDialog = PhotoDetailSlideDialog
-                .newInstance(mPhotosResponse, position);
+                .newInstance(mPresenter.getPhotosList(), position);
         photoDetailSlideDialog.show(getSupportFragmentManager(), "");
     }
 
@@ -173,7 +154,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void notifySliderPhotosUpdated() {
-        EventBus.getDefault().post(new PhotosUpdatedEvent(mPhotosResponse.getPhotos()));
+        EventBus.getDefault().post(new PhotosUpdatedEvent(mPresenter.getPhotosList()));
     }
 
     /**
@@ -189,7 +170,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private void loadMorePhotos(boolean shouldNotifySlider) {
         if (!mLoadingMorePhotoFlag) {
             mPageCount++;
-            mPresenter.loadPhotos(mPageCount, getString(R.string.consumer_key), shouldNotifySlider);
+            mPresenter.loadPhotos(mPageCount, shouldNotifySlider);
             mLoadingMorePhotoFlag = true;
         }
     }

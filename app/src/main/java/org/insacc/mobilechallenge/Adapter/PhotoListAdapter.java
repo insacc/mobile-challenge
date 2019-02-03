@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 import org.insacc.mobilechallenge.Model.Photo;
-import org.insacc.mobilechallenge.Network.Config;
 import org.insacc.mobilechallenge.PopularPhotos.PopularPhotosContract;
 import org.insacc.mobilechallenge.R;
 
@@ -50,7 +49,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         Photo currentPhoto = mPhotoList.get(position);
         final int tempPosition = position;
         Glide.with((Context) mView)
-                .load(currentPhoto.getImageUrl().get(Config.IMAGE_SIZE_20_INDEX).getHttpsUrl())
+                .load(currentPhoto.getImageUrl().getSmall())
                 .into(holder.mPhotoView);
         holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override

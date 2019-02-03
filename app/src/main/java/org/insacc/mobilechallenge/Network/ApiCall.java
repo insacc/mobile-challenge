@@ -1,6 +1,8 @@
 package org.insacc.mobilechallenge.Network;
 
-import org.insacc.mobilechallenge.Model.PhotosResponse;
+import org.insacc.mobilechallenge.Model.Photo;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -13,7 +15,7 @@ import retrofit2.http.Query;
 
 public interface ApiCall {
     @GET("photos")
-    Observable<PhotosResponse> getPhotos(@Query("feature") String featureName, @Query("exclude")
-            String excludeCategory, @Query("page") int pageNumber, @Query("consumer_key") String consumerKey,
-                                         @Query("image_size") String imageSize);
+    Observable<List<Photo>> getPhotos(@Query("client_id") String consumerKey,
+                                      @Query("page") int pageNumber,
+                                      @Query("per_page") int rpp);
 }

@@ -1,6 +1,7 @@
 package org.insacc.mobilechallenge.PhotoDetail;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
@@ -16,9 +17,12 @@ import org.insacc.mobilechallenge.Events.DismissDialogEvent;
 import org.insacc.mobilechallenge.Events.LoadMorePhotoEvent;
 import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
 import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
-import org.insacc.mobilechallenge.Model.PhotosResponse;
+import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -38,7 +42,7 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     @Inject
     PhotoDetailSlideContract.Presenter mPresenter;
     //Server response object which contains the list of photos
-    private PhotosResponse mPhotosResponse;
+    private List<Photo> mPhotosList;
     //Position of the image that is selected by the user to open it in full screen.
     private int mSelectedPhotoPosition;
     private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
@@ -46,14 +50,14 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     ViewPager mPhotoSlider;
 
     /**
-     * @param photosResponse the server response object that contains the list of photos
+     * @param photosList the server response object that contains the list of photos
      * @param photoPosition  the position of the image that is selected by the user
      * @return An instance of this view with arguments @param photosResponse and @param photoPosition
      */
-    public static PhotoDetailSlideDialog newInstance(PhotosResponse photosResponse, int photoPosition) {
+    public static PhotoDetailSlideDialog newInstance(List<Photo> photosList, int photoPosition) {
         PhotoDetailSlideDialog photoDetailSlideDialog = new PhotoDetailSlideDialog();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PHOTO_RESPONSE, photosResponse);
+        bundle.putParcelableArrayList(PHOTO_RESPONSE, (ArrayList<? extends Parcelable>) photosList);
         bundle.putInt(SELECTED_PHOTO_POSITION, photoPosition);
         photoDetailSlideDialog.setArguments(bundle);
 
@@ -64,14 +68,14 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mPhotosResponse = savedInstanceState.getParcelable(PHOTO_RESPONSE);
+            mPhotosList = savedInstanceState.getParcelableArrayList(PHOTO_RESPONSE);
             mSelectedPhotoPosition = savedInstanceState.getInt(SLIDER_CURRENT_POSITION);
         } else {
             extractPhotosResponse();
         }
-        if (mPhotosResponse != null)
+        if (mPhotosList != null)
             mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getChildFragmentManager(),
-                    mPhotosResponse.getPhotos(), this);
+                    mPhotosList, this);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.dialog_theme);
     }
 
@@ -85,7 +89,7 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(PHOTO_RESPONSE, mPhotosResponse);
+        outState.putParcelableArrayList(PHOTO_RESPONSE, (ArrayList<? extends Parcelable>) mPhotosList);
         outState.putInt(SELECTED_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
     }
 
@@ -93,8 +97,9 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
      * Extracts the server response object from the arguments and sets it.
      */
     private void extractPhotosResponse() {
-        if (getArguments() != null && getArguments().getParcelable(PHOTO_RESPONSE) != null)
-            mPhotosResponse = getArguments().getParcelable(PHOTO_RESPONSE);
+        if (getArguments() != null && getArguments().getParcelableArrayList(PHOTO_RESPONSE) != null) {
+            mPhotosList = getArguments().getParcelableArrayList(PHOTO_RESPONSE);
+        }
     }
 
     @Nullable
@@ -139,7 +144,7 @@ public class PhotoDetailSlideDialog extends DialogFragment implements PhotoDetai
      */
     @Subscribe
     public void onPhotosUpdateEvent(PhotosUpdatedEvent event) {
-        this.mPhotosResponse.setPhotos(event.getPhotosList());
+        this.mPhotosList  = (event.getPhotosList());
         updateViewPager();
     }
 

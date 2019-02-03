@@ -1,8 +1,8 @@
 package org.insacc.mobilechallenge.PopularPhotos;
 
 import org.insacc.mobilechallenge.Model.Photo;
-import org.insacc.mobilechallenge.Model.PhotosResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +19,6 @@ public interface PopularPhotosContract {
 
         void onImageClicked(int position);
 
-        void setPhotosResponse(PhotosResponse photosResponse);
-
         void openFullScreenPhotoDialog(int position);
 
         void onScrollLoadMorePhoto();
@@ -29,9 +27,13 @@ public interface PopularPhotosContract {
     }
 
     interface Presenter {
-        void loadPhotos(int pageNumber, String consumerKey, boolean shouldNotifySlider);
+        void loadPhotos(int pageNumber, boolean shouldNotifySlider);
 
         void callFullScreenPhotoDialog(int position);
+
+        ArrayList<Photo> getPhotosList();
+
+        void setPhotosList(List<Photo> photosList);
 
         void unSubscribe();
     }
