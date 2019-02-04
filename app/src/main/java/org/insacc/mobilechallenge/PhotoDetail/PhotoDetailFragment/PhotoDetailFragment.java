@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by can on 31.07.2017.
@@ -33,6 +34,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     @Inject
     PhotoDetailContract.Presenter mPresenter;
     private Photo mCurrentPhoto;
+    private Unbinder mUnbinder;
     @BindView(R.id.full_screen_photo_item)
     ImageView mFullScreenImage;
     @BindView(R.id.full_screen_photo_title)
@@ -68,11 +70,18 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
         DaggerPhotoDetailComponent.builder()
                 .appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent())
                 .photoDetailModule(new PhotoDetailModule(this)).build().inject(this);
-        ButterKnife.bind(this, root);
+        mUnbinder = ButterKnife.bind(this, root);
         extractPhotoDetail();
         mPresenter.setPhotoDetails();
 
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (mUnbinder != null) mUnbinder.unbind();
     }
 
     /**
