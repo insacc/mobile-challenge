@@ -22,12 +22,10 @@ public interface PopularPhotosContract {
         void openFullScreenPhotoDialog(int position);
 
         void onScrollLoadMorePhoto();
-
-        void notifySliderPhotosUpdated();
     }
 
     interface Presenter {
-        void loadPhotos(boolean shouldNotifySlider);
+        void loadPhotos();
 
         void callFullScreenPhotoDialog(int position);
 

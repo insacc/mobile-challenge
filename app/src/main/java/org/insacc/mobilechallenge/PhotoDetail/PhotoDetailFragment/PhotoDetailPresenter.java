@@ -20,12 +20,4 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         mView.loadPhoto();
         mView.setPhotoDescription();
     }
-
-    /**
-     * Called to dismiss the dialog fragment
-     */
-    @Override
-    public void callDismiss() {
-        mView.dismissDialog();
-    }
 }

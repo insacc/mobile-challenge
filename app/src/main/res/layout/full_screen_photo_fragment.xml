@@ -15,21 +15,12 @@
             android:alpha="0.2"
             android:background="@android:color/darker_gray" />
 
-        <ImageButton
-            android:id="@+id/full_screen_photo_back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/ic_keyboard_backspace_black_36dp" />
-
         <TextView
             android:id="@+id/full_screen_photo_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/full_screen_photo_back_btn" />
+            android:layout_marginLeft="20dp" />
     </RelativeLayout>
 
     <ImageView

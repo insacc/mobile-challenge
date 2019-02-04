@@ -6,15 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
-import org.greenrobot.eventbus.EventBus;
-import org.insacc.mobilechallenge.Events.DismissDialogEvent;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.R;
@@ -41,19 +37,6 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     ImageView mFullScreenImage;
     @BindView(R.id.full_screen_photo_title)
     TextView mPhotoTitle;
-    @BindView(R.id.full_screen_photo_back_btn)
-    ImageButton mBackButton;
-
-    private View.OnClickListener mListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.full_screen_photo_back_btn:
-                    mPresenter.callDismiss();
-                    break;
-            }
-        }
-    };
 
     /**
      * Creates and returns a PhotoDetailFragment object for the given Photo @param photo
@@ -86,7 +69,6 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
                 .appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent())
                 .photoDetailModule(new PhotoDetailModule(this)).build().inject(this);
         ButterKnife.bind(this, root);
-        mBackButton.setOnClickListener(mListener);
         extractPhotoDetail();
         mPresenter.callLoadPhotoDetails();
 
@@ -111,13 +93,5 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     @Override
     public void setPhotoDescription() {
         mPhotoTitle.setText(mCurrentPhoto.getDescription());
-    }
-
-    /**
-     * Broadcasts and event to dismiss the dialog fragment.
-     */
-    @Override
-    public void dismissDialog() {
-        EventBus.getDefault().post(new DismissDialogEvent());
     }
 }

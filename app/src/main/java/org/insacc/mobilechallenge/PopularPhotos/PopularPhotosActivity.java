@@ -1,9 +1,13 @@
 package org.insacc.mobilechallenge.PopularPhotos;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
@@ -17,7 +21,7 @@ import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
 import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
-import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailSlideDialog;
+import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailActivity;
 import org.insacc.mobilechallenge.R;
 
 import java.util.ArrayList;
@@ -37,6 +41,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private static final String ARG_KEY_PHOTOS_LIST = CLASS_NAME + ".photosList";
     private static final String ARG_KEY_LIST_VIEW_LAST_POSITION = CLASS_NAME + "listLastPosition";
     private static final String ARG_KEY_PAGE_COUNT = CLASS_NAME + "pageCount";
+    private static final int REQUEST_PHOTO_DETAIL = 1001;
     @Inject
     PopularPhotosContract.Presenter mPresenter;
     private GreedoLayoutManager mGreedoLayoutManager;
@@ -60,7 +65,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mPhotosRecyclerList.setAdapter(mPhotoListAdapter);
 
         if (savedInstanceState == null)
-            mPresenter.loadPhotos(false);
+            mPresenter.loadPhotos();
         else {
             int pageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
             mPresenter.setCurrentPageNumber(pageCount);
@@ -128,9 +133,11 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void openFullScreenPhotoDialog(int position) {
-        PhotoDetailSlideDialog photoDetailSlideDialog = PhotoDetailSlideDialog
-                .newInstance(mPresenter.getPhotosList(), position);
-        photoDetailSlideDialog.show(getSupportFragmentManager(), "");
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
+        intent.putExtra(PhotoDetailActivity.ARG_CURRENT_PHOTO_POSITION, position);
+        intent.putExtra(PhotoDetailActivity.ARG_KEY_PHOTOS_LIST, mPresenter.getPhotosList());
+
+        startActivityForResult(intent, REQUEST_PHOTO_DETAIL);
     }
 
     /**
@@ -139,16 +146,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void onScrollLoadMorePhoto() {
-        loadMorePhotos(false);
-    }
-
-    /**
-     * Notifies the fullscreenslider view to indicate that
-     * a new page of photos are fetched from the server.
-     */
-    @Override
-    public void notifySliderPhotosUpdated() {
-        EventBus.getDefault().post(new PhotosUpdatedEvent(mPresenter.getPhotosList()));
+        loadMorePhotos();
     }
 
     /**
@@ -156,34 +154,9 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      * The loading more photo flag indicates whether the presenter has been already
      * fetching additional photos from the server or not. If it has been already fetching
      * new photos then it does nothing.
-     *
-     * @param shouldNotifySlider flag to indicate whether the slider should be
-     *                           notified when a new page of photos are fetched from the server
      */
-    private void loadMorePhotos(boolean shouldNotifySlider) {
-        mPresenter.loadPhotos(shouldNotifySlider);
-    }
-
-    /**
-     * Called when the user closes the slider view and scrolls to the position of
-     * the last image the user saw.
-     *
-     * @param event the event that sends the position of the last image the user saw.
-     */
-    @Subscribe
-    public void onPhotoSliderCloseScroll(ScrollToPositionEvent event) {
-        mGreedoLayoutManager.scrollToPosition(event.getPosition());
-    }
-
-    /**
-     * Called when the slider reaches to the last element and when
-     * new page of photos should be fetched from the server.
-     *
-     * @param event event that sends the position of the slider.
-     */
-    @Subscribe
-    public void onSliderLastItemIsDisplayed(LoadMorePhotoEvent event) {
-        loadMorePhotos(true);
+    private void loadMorePhotos() {
+        mPresenter.loadPhotos();
     }
 
     @Override
@@ -206,5 +179,16 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.unSubscribe();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_PHOTO_DETAIL && resultCode == Activity.RESULT_OK) {
+            mPresenter.setCurrentPageNumber(data.getIntExtra(PhotoDetailActivity.ARG_CURRENT_PHOTO_POSITION, 0));
+            mPhotoListAdapter.setPhotosList(data.<Photo>getParcelableArrayListExtra(PhotoDetailActivity.ARG_KEY_PHOTOS_LIST));
+            mPhotosRecyclerList.scrollToPosition(data.getIntExtra(PhotoDetailActivity.ARG_CURRENT_PHOTO_POSITION, 0));
+        }
     }
 }

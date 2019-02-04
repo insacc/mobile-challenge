@@ -9,6 +9,7 @@ import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment.PhotoDetailFragment;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailSlideContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ import java.util.List;
  */
 
 public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
+    private static final int LOAD_NEXT_PAGE_THRESHOLD = 3;
+
     //The list of photos that this slider needs to display
     private List<Photo> mPhotoList;
     //The slider view which contains the view pager ui object.
@@ -24,15 +27,16 @@ public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public PhotoDetailViewPagerAdapter(FragmentManager fm, List<Photo> photos, PhotoDetailSlideContract.View view) {
         super(fm);
-        this.mPhotoList = photos;
+        this.mPhotoList = photos == null ? new ArrayList<Photo>() : photos;
         this.mView = view;
     }
 
     @Override
     public Fragment getItem(int position) {
         PhotoDetailFragment photoDetailFragment = PhotoDetailFragment.newInstance(mPhotoList.get(position));
-        if(position == getCount() -1)
-            mView.broadcastLoadMorePhotos();
+        if (position == getCount() - LOAD_NEXT_PAGE_THRESHOLD) {
+            mView.onLastImageIsDisplayed();
+        }
 
         return photoDetailFragment;
     }
@@ -43,7 +47,16 @@ public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getItemPosition(Object object){
+    public int getItemPosition(Object object) {
         return PagerAdapter.POSITION_NONE;
+    }
+
+    public void bindNextPhotos(List<Photo> photosList) {
+        mPhotoList.addAll(photosList);
+        notifyDataSetChanged();
+    }
+
+    public List<Photo> getPhotosList() {
+        return mPhotoList;
     }
 }

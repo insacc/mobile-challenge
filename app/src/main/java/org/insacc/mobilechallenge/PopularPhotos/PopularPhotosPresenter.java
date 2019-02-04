@@ -14,8 +14,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     private PopularPhotosContract.View mView;
     //Network service class
     private GetPhotosService mGetPhotosService;
-    //Flag to indicate whether the slider needs to be notified when new photos are fetched.
-    private boolean mShouldNotifySlider;
     private List<Photo> mPhotos = new ArrayList<>();
 
     public PopularPhotosPresenter(PopularPhotosContract.View view, GetPhotosService getPhotosService) {
@@ -25,12 +23,9 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
 
     /**
      * Using the network service object this method loads photos from the server
-     * @param shouldNotifySlider Flag to indicate whether the slider needs to be notified
-     *                           when new photos are fetched.
      */
     @Override
-    public void loadPhotos(boolean shouldNotifySlider) {
-        mShouldNotifySlider = shouldNotifySlider;
+    public void loadPhotos() {
         mGetPhotosService.loadPhotos(this);
     }
 
@@ -76,9 +71,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     public void onFirstPhotoPageLoaded(List<Photo> photosResponse) {
         setPhotosList(photosResponse);
         mView.populatePhotosList(photosResponse);
-        if (mShouldNotifySlider)
-            mView.notifySliderPhotosUpdated();
-        mShouldNotifySlider = false;
     }
 
     // TODO handle refresh and next page loads separately
@@ -86,9 +78,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     public void onNextPhotoPageLoaded(List<Photo> photosList) {
         setPhotosList(photosList);
         mView.populatePhotosList(photosList);
-        if (mShouldNotifySlider)
-            mView.notifySliderPhotosUpdated();
-        mShouldNotifySlider = false;
     }
 
     @Override
@@ -106,6 +95,5 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     @Override
     public void onPhotoListLoadFail() {
         mView.displayLoadPhotoErrorMsg();
-        mShouldNotifySlider = false;
     }
 }

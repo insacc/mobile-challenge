@@ -1,6 +1,7 @@
 package org.insacc.mobilechallenge.PhotoDetail;
 
 import org.insacc.mobilechallenge.CustomScope;
+import org.insacc.mobilechallenge.Service.NetworkService.GetPhotosService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,7 +20,7 @@ public class PhotoDetailSlideModule {
 
     @Provides
     @CustomScope
-    public PhotoDetailSlideContract.Presenter providesPresenter() {
-        return new PhotoDetailSlidePresenter(mView);
+    public PhotoDetailSlideContract.Presenter providesPresenter(GetPhotosService getPhotosService) {
+        return new PhotoDetailSlidePresenter(mView, getPhotosService);
     }
 }

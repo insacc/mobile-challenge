@@ -11,13 +11,9 @@ public interface PhotoDetailContract {
         void loadPhoto();
 
         void setPhotoDescription();
-
-        void dismissDialog();
     }
 
     interface Presenter {
         void callLoadPhotoDetails();
-
-        void callDismiss();
     }
 }

@@ -37,6 +37,11 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         notifyDataSetChanged();
     }
 
+    public void setPhotosList(List<Photo> photosList) {
+        mPhotoList = photosList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_list_item, parent, false);
