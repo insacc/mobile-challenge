@@ -35,8 +35,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
     public static final String ARG_CURRENT_PAGE = CLASS_NAME + ".currentPage";
     @Inject
     PhotoDetailSlideContract.Presenter mPresenter;
-    //Server response object which contains the list of photos
-    private List<Photo> mPhotosList;
     //Position of the image that is selected by the user to open it in full screen.
     private int mSelectedPhotoPosition;
     private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
@@ -54,14 +52,20 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
                 .appComponent(((MyApplication) getApplicationContext()).getAppComponent())
                 .photoDetailSlideModule(new PhotoDetailSlideModule(this))
                 .build().inject(this);
-        if (savedInstanceState != null) {
-            mPhotosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
-            mSelectedPhotoPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
-        } else {
-            extractPhotoDataFromIntent();
-        }
+        setupUi(savedInstanceState);
         setupToolbar();
-        setupViewPager();
+    }
+
+    private void setupUi(Bundle savedInstanceState) {
+        List<Photo> photosList = null;
+        if (savedInstanceState != null) {
+            photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
+            mSelectedPhotoPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
+        } else if (getIntent() != null && getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST) != null) {
+            photosList = getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST);
+            mSelectedPhotoPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
+        }
+        setupViewPager(photosList);
     }
 
     private void setupToolbar() {
@@ -81,8 +85,8 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         });
     }
 
-    private void setupViewPager() {
-        mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getSupportFragmentManager(), mPhotosList, this);
+    private void setupViewPager(List<Photo> photosList) {
+        mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getSupportFragmentManager(), photosList, this);
         mPhotoSlider.setAdapter(mPhotoSliderAdapter);
         mPhotoSlider.setCurrentItem(mSelectedPhotoPosition);
     }
@@ -97,18 +101,9 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>) mPhotosList);
+        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>)
+                mPhotoSliderAdapter.getPhotosList());
         outState.putInt(ARG_CURRENT_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
-    }
-
-    /**
-     * Extracts the server response object from the arguments and sets it.
-     */
-    private void extractPhotoDataFromIntent() {
-        if (getIntent() != null && getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST) != null) {
-            mPhotosList = getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST);
-            mSelectedPhotoPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
-        }
     }
 
     /**
