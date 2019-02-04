@@ -31,7 +31,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
     }
 
     /**
-     * Fetches the photos from the server using the parameters declared.
+     * Fetches the photos from the server.
      * @param callback the callback which will be called once the network request is done.
      */
     @Override
@@ -42,7 +42,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
     }
 
     /**
-     * Resets the current page number to 1 and loads the photos from the server.
+     * Resets the current page number to 1 and fetches the photos from the server.
      * @param callback the callback which will be called once the network request is done.
      */
     @Override

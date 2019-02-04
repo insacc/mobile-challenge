@@ -165,6 +165,9 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mSnackbar.show();
     }
 
+    /**
+     * Dismisses the snackbar if exist
+     */
     private void dismissSnackbar() {
         if (mSnackbar != null) mSnackbar.dismiss();
     }
@@ -207,9 +210,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
 
     /**
      * Calls the presenter's method to fetch more photos from the server.
-     * The loading more photo flag indicates whether the presenter has been already
-     * fetching additional photos from the server or not. If it has been already fetching
-     * new photos then it does nothing.
      */
     private void loadMorePhotos() {
         mPresenter.loadPhotos();

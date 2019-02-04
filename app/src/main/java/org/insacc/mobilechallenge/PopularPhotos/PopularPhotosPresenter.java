@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, GetPhotosService.GetPhotosCallback {
     private PopularPhotosContract.View mView;
-    //Network service class
+    //Network service object
     private GetPhotosService mGetPhotosService;
 
     public PopularPhotosPresenter(PopularPhotosContract.View view, GetPhotosService getPhotosService) {
@@ -27,6 +27,9 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.loadPhotos(this);
     }
 
+    /**
+     * Using the network service object this method refreshes the photos from the server
+     */
     @Override
     public void refreshPhotos() {
         mGetPhotosService.refreshPhotos(this);
@@ -51,7 +54,7 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     }
 
     /**
-     * @return the current photo page number from the service
+     * @return the current photo page number from the networkd service
      */
     @Override
     public int getCurrentPageNumber() {
@@ -59,7 +62,7 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     }
 
     /**
-     * Sets the current photo page number to the get photo service after an orientation change
+     * Sets the current photo page number to the get-photo-service after an orientation change
      * @param pageNumber the last page number, that was fetched
      */
     @Override
@@ -67,13 +70,16 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.setCurrentPageNumber(pageNumber);
     }
 
+    /**
+     * Called when a network request is in progress to update the ui
+     */
     @Override
     public void onLoading() {
         mView.showLoadingIndicator();
     }
 
     /**
-     * Called when the photos are fetched from the server. Populates the recycler view list adapter.
+     * Called when the photos on the first page are fetched from the server. Populates the recycler view list adapter.
      * @param photosResponse the photos list that is fetched from the server
      */
     @Override

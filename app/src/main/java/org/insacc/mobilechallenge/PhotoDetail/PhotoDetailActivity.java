@@ -93,11 +93,10 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
     }
 
     /**
-     * Saves the current position of the image and the  server response object, when the screen orientation
+     * Saves the current position of the image and the server response object, when the screen orientation
      * is changed by the user.
      *
-     * @param outState the object that saves the current state of the dialog fragment
-     *                 when the screen orientation is changed.
+     * @param outState the object that saves the current state when the screen orientation is changed.
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
