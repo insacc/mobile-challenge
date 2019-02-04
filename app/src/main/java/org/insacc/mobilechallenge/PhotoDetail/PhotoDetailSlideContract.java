@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface PhotoDetailSlideContract {
     interface View {
-        void onLastImageIsDisplayed();
+        void onScrollLoadMorePhoto();
 
-        void populatePhotosList(List<Photo> photos);
+        void appendPhotosList(List<Photo> photos);
     }
 
     interface Presenter {

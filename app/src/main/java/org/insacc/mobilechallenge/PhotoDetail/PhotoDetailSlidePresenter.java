@@ -57,7 +57,7 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
 
     @Override
     public void onNextPhotoPageLoaded(List<Photo> photosList) {
-        mView.populatePhotosList(photosList);
+        mView.appendPhotosList(photosList);
     }
 
     @Override

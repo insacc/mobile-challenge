@@ -35,8 +35,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
     public static final String ARG_CURRENT_PAGE = CLASS_NAME + ".currentPage";
     @Inject
     PhotoDetailSlideContract.Presenter mPresenter;
-    //Position of the image that is selected by the user to open it in full screen.
-    private int mSelectedPhotoPosition;
     private PhotoDetailViewPagerAdapter mPhotoSliderAdapter;
     @BindView(R.id.full_screen_photo_view_pager)
     ViewPager mPhotoSlider;
@@ -58,16 +56,17 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
 
     private void setupUi(Bundle savedInstanceState) {
         List<Photo> photosList = null;
+        int currentPosition = 0;
         if (savedInstanceState != null) {
             photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
-            mSelectedPhotoPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
+            currentPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
             mPresenter.setCurrentPageNumber(savedInstanceState.getInt(ARG_CURRENT_PAGE, 1));
         } else if (getIntent() != null && getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST) != null) {
             photosList = getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST);
-            mSelectedPhotoPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
+            currentPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
             mPresenter.setCurrentPageNumber(getIntent().getIntExtra(ARG_CURRENT_PAGE, 1));
         }
-        setupViewPager(photosList);
+        setupViewPager(photosList, currentPosition);
     }
 
     private void setupToolbar() {
@@ -87,10 +86,10 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         });
     }
 
-    private void setupViewPager(List<Photo> photosList) {
+    private void setupViewPager(List<Photo> photosList, int currentPosition) {
         mPhotoSliderAdapter = new PhotoDetailViewPagerAdapter(getSupportFragmentManager(), photosList, this);
         mPhotoSlider.setAdapter(mPhotoSliderAdapter);
-        mPhotoSlider.setCurrentItem(mSelectedPhotoPosition);
+        mPhotoSlider.setCurrentItem(currentPosition);
     }
 
     /**
@@ -113,12 +112,12 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
      * Called when the user opens the last image of the current list of photos.
      */
     @Override
-    public void onLastImageIsDisplayed() {
+    public void onScrollLoadMorePhoto() {
         mPresenter.loadMorePhotos();
     }
 
     @Override
-    public void populatePhotosList(List<Photo> photos) {
+    public void appendPhotosList(List<Photo> photos) {
         mPhotoSliderAdapter.bindNextPhotos(photos);
     }
 }

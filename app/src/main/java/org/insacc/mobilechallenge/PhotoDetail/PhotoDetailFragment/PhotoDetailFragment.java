@@ -77,7 +77,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
 
     /**
      * Loads the image for the given photo object from the server and displays it using the
-     * Glide library. The image that is fetched from the server is size of 31.
+     * Glide library.
      */
     @Override
     public void loadPhoto() {

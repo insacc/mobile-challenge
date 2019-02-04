@@ -13,7 +13,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     }
 
     /**
-     * Calls the functions to load the details of the photo.
+     * Calls the functions to set the details of the photo.
      */
     @Override
     public void setPhotoDetails() {

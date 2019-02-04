@@ -34,7 +34,7 @@ public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         PhotoDetailFragment photoDetailFragment = PhotoDetailFragment.newInstance(mPhotoList.get(position));
         if (position == getCount() - LOAD_NEXT_PAGE_THRESHOLD) {
-            mView.onLastImageIsDisplayed();
+            mView.onScrollLoadMorePhoto();
         }
 
         return photoDetailFragment;
