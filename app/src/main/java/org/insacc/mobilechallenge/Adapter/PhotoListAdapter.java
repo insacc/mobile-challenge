@@ -15,6 +15,7 @@ import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.PopularPhotos.PopularPhotosContract;
 import org.insacc.mobilechallenge.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,21 +25,21 @@ import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoListViewHolder>
         implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate {
+    private static final int LOAD_MORE_PAGE_THRESHOLD = 3;
     private PopularPhotosContract.View mView;
-    private List<Photo> mPhotoList;
+    private List<Photo> mPhotoList = new ArrayList<>();
 
-    public PhotoListAdapter(PopularPhotosContract.View view, List<Photo> photoList) {
+    public PhotoListAdapter(PopularPhotosContract.View view) {
         this.mView = view;
-        this.mPhotoList = photoList;
-    }
-
-    public void updatePhotoList(List<Photo> photos) {
-        mPhotoList.addAll(photos);
-        notifyDataSetChanged();
     }
 
     public void setPhotosList(List<Photo> photosList) {
         mPhotoList = photosList;
+        notifyDataSetChanged();
+    }
+
+    public void updatePhotoList(List<Photo> photos) {
+        mPhotoList.addAll(photos);
         notifyDataSetChanged();
     }
 
@@ -50,20 +51,23 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     }
 
     @Override
-    public void onBindViewHolder(PhotoListViewHolder holder, int position) {
+    public void onBindViewHolder(final PhotoListViewHolder holder, int position) {
         Photo currentPhoto = mPhotoList.get(position);
-        final int tempPosition = position;
         Glide.with((Context) mView)
                 .load(currentPhoto.getImageUrl().getSmall())
                 .into(holder.mPhotoView);
         holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mView.onImageClicked(tempPosition);
+                int position = holder.getAdapterPosition();
+
+                if (position == RecyclerView.NO_POSITION) return;
+                mView.onPhotoClicked(position);
             }
         });
-        if (position == mPhotoList.size() - 1)
+        if (position == mPhotoList.size() - LOAD_MORE_PAGE_THRESHOLD) {
             mView.onScrollLoadMorePhoto();
+        }
     }
 
     @Override
