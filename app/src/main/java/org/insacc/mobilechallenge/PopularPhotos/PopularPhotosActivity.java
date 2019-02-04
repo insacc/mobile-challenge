@@ -159,18 +159,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mPresenter.loadPhotos();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
     /**
      * On destroy it kills the server connection, so that the callback
      * does not cause any exception.
