@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
@@ -42,6 +44,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     PopularPhotosContract.Presenter mPresenter;
     private GreedoLayoutManager mGreedoLayoutManager;
     private PhotoListAdapter mPhotoListAdapter;
+    private Snackbar mSnackbar;
     @BindView(R.id.popular_photo_list)
     RecyclerView mPhotosRecyclerList;
     @BindView(R.id.refresh_layout_popular_activity)
@@ -119,6 +122,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void setPhotosList(List<Photo> photos) {
+        dismissSnackbar();
         mRefreshLayout.setRefreshing(false);
         mPhotoListAdapter.setPhotosList(photos);
     }
@@ -130,6 +134,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void appendPhotosList(List<Photo> photos) {
+        dismissSnackbar();
         mPhotoListAdapter.appendPhotosList(photos);
     }
 
@@ -140,7 +145,18 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     public void displayLoadPhotoErrorMsg() {
         mRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, getString(R.string.photo_load_fail), Toast.LENGTH_LONG).show();
+        mSnackbar = Snackbar.make(mRefreshLayout, getString(R.string.photo_load_fail), Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.loadPhotos();
+            }
+        });
+        mSnackbar.show();
+    }
+
+    private void dismissSnackbar() {
+        if (mSnackbar != null) mSnackbar.dismiss();
     }
 
     /**
