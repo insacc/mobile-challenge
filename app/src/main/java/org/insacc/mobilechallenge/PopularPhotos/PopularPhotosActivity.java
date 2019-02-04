@@ -93,10 +93,10 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
             mPresenter.loadPhotos();
         else {
             int pageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
-            mPresenter.setCurrentPageNumber(pageCount);
             List<Photo> photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
             int lastListPosition = savedInstanceState.getInt(ARG_KEY_LIST_VIEW_LAST_POSITION);
-            mPhotoListAdapter.appendPhotosList(photosList);
+            mPresenter.setCurrentPageNumber(pageCount);
+            mPhotoListAdapter.setPhotosList(photosList);
             mGreedoLayoutManager.scrollToPosition(lastListPosition);
         }
     }
@@ -156,7 +156,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     public void displayLoadPhotoErrorMsg() {
         mRefreshLayout.setRefreshing(false);
         mSnackbar = Snackbar.make(mRefreshLayout, getString(R.string.photo_load_fail), Snackbar.LENGTH_INDEFINITE);
-        mSnackbar.setAction("Retry", new View.OnClickListener() {
+        mSnackbar.setAction(getString(R.string.retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.loadPhotos();
