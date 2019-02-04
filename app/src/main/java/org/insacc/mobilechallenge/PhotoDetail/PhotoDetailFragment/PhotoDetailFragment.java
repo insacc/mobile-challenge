@@ -36,15 +36,24 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     private static final String ARG_KEY_PHOTO_DETAIL = CLASS_NAME + ".photoDetail";
     @Inject
     PhotoDetailContract.Presenter mPresenter;
-    private Photo mPhotoDetail;
-    //Click listener for the buttons.
-    private View.OnClickListener mListener;
+    private Photo mCurrentPhoto;
     @BindView(R.id.full_screen_photo_item)
     ImageView mFullScreenImage;
     @BindView(R.id.full_screen_photo_title)
     TextView mPhotoTitle;
     @BindView(R.id.full_screen_photo_back_btn)
     ImageButton mBackButton;
+
+    private View.OnClickListener mListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.full_screen_photo_back_btn:
+                    mPresenter.callDismiss();
+                    break;
+            }
+        }
+    };
 
     /**
      * Creates and returns a PhotoDetailFragment object for the given Photo @param photo
@@ -64,15 +73,9 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     /**
      * Extracts the details of the photo from the fragment bundle.
      */
-    private void getPhotoDetail() {
+    private void extractPhotoDetail() {
         if (getArguments() != null && getArguments().getParcelable(ARG_KEY_PHOTO_DETAIL) != null)
-            mPhotoDetail = getArguments().getParcelable(ARG_KEY_PHOTO_DETAIL);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mListener = providesButtonListener();
+            mCurrentPhoto = getArguments().getParcelable(ARG_KEY_PHOTO_DETAIL);
     }
 
     @Nullable
@@ -84,28 +87,10 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
                 .photoDetailModule(new PhotoDetailModule(this)).build().inject(this);
         ButterKnife.bind(this, root);
         mBackButton.setOnClickListener(mListener);
-        getPhotoDetail();
+        extractPhotoDetail();
         mPresenter.callLoadPhotoDetails();
 
         return root;
-    }
-
-    /**
-     * Provides Click listener object for the button clicks
-     *
-     * @return the click listener object which handles the back button click.
-     */
-    private View.OnClickListener providesButtonListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.full_screen_photo_back_btn:
-                        mPresenter.callDismiss();
-                        break;
-                }
-            }
-        };
     }
 
     /**
@@ -113,9 +98,9 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
      * Glide library. The image that is fetched from the server is size of 31.
      */
     @Override
-    public void loadPhotoFromServer() {
+    public void loadPhoto() {
         Glide.with(this)
-                .load(mPhotoDetail.getImageUrl().getFull())
+                .load(mCurrentPhoto.getImageUrl().getFull())
                 .apply(RequestOptions.fitCenterTransform())
                 .into(mFullScreenImage);
     }
@@ -124,8 +109,8 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
      * Populates the details of the photo.
      */
     @Override
-    public void loadPhotoDetails() {
-        mPhotoTitle.setText(mPhotoDetail.getDescription());
+    public void setPhotoDescription() {
+        mPhotoTitle.setText(mCurrentPhoto.getDescription());
     }
 
     /**

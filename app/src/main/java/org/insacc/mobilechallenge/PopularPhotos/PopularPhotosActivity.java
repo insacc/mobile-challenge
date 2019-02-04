@@ -19,7 +19,6 @@ import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailSlideDialog;
 import org.insacc.mobilechallenge.R;
-import org.insacc.mobilechallenge.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +153,6 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
 
     /**
      * Calls the presenter's method to fetch more photos from the server.
-     * Increments the current page count.
      * The loading more photo flag indicates whether the presenter has been already
      * fetching additional photos from the server or not. If it has been already fetching
      * new photos then it does nothing.

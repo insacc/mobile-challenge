@@ -8,9 +8,9 @@ package org.insacc.mobilechallenge.PhotoDetail.PhotoDetailFragment;
 
 public interface PhotoDetailContract {
     interface View {
-        void loadPhotoFromServer();
+        void loadPhoto();
 
-        void loadPhotoDetails();
+        void setPhotoDescription();
 
         void dismissDialog();
     }
