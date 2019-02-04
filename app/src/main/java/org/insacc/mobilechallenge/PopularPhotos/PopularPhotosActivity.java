@@ -7,18 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.insacc.mobilechallenge.Adapter.PhotoListAdapter;
 import org.insacc.mobilechallenge.AppModule.GetPhotosServiceModule;
-import org.insacc.mobilechallenge.Events.LoadMorePhotoEvent;
-import org.insacc.mobilechallenge.Events.PhotosUpdatedEvent;
-import org.insacc.mobilechallenge.Events.ScrollToPositionEvent;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailActivity;
