@@ -84,6 +84,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
         Glide.with(this)
                 .load(mCurrentPhoto.getImageUrl().getRegular())
                 .apply(RequestOptions.fitCenterTransform())
+                .apply(RequestOptions.placeholderOf(R.color.lightGrey))
                 .into(mFullScreenImage);
     }
 
