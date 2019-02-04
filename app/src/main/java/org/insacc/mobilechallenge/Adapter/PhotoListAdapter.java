@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 import org.insacc.mobilechallenge.Model.Photo;
@@ -59,6 +60,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         Photo currentPhoto = mPhotoList.get(position);
         Glide.with((Context) mView)
                 .load(currentPhoto.getImageUrl().getSmall())
+                .apply(RequestOptions.placeholderOf(R.color.dimGrey))
                 .into(holder.mPhotoView);
         holder.mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override

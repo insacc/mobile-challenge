@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
+import com.fivehundredpx.greedolayout.GreedoSpacingItemDecoration;
 
 import org.insacc.mobilechallenge.Adapter.PhotoListAdapter;
 import org.insacc.mobilechallenge.AppModule.GetPhotosServiceModule;
@@ -20,6 +21,7 @@ import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.MyApplication;
 import org.insacc.mobilechallenge.PhotoDetail.PhotoDetailActivity;
 import org.insacc.mobilechallenge.R;
+import org.insacc.mobilechallenge.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,8 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
         mPhotosRecyclerList.setLayoutManager(mGreedoLayoutManager);
         mPhotosRecyclerList.setAdapter(mPhotoListAdapter);
+        GreedoSpacingItemDecoration itemDecoration = new GreedoSpacingItemDecoration(Util.dpToPx(4, this));
+        mPhotosRecyclerList.addItemDecoration(itemDecoration);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
