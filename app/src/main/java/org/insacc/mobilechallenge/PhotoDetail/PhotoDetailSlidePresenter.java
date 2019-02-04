@@ -46,6 +46,11 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
     }
 
     @Override
+    public void unsubscribe() {
+        mGetPhotosService.unSubscribe();
+    }
+
+    @Override
     public void onLoading() {
         // No op
     }

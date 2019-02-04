@@ -107,6 +107,12 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         outState.putInt(ARG_CURRENT_PAGE, mPresenter.getCurrentPageNumber());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
     /**
      * Called when the user opens the last image of the current list of photos.
      */

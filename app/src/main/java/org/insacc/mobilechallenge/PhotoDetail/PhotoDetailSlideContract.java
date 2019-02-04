@@ -22,5 +22,7 @@ public interface PhotoDetailSlideContract {
         void setCurrentPageNumber(int pageNumber);
 
         int getCurrentPageNumber();
+
+        void unsubscribe();
     }
 }
