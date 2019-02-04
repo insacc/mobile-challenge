@@ -17,6 +17,8 @@ public interface PopularPhotosContract {
 
         void appendPhotosList(List<Photo> photos);
 
+        void showLoadingIndicator();
+
         void displayLoadPhotoErrorMsg();
 
         void onPhotoClicked(int position);

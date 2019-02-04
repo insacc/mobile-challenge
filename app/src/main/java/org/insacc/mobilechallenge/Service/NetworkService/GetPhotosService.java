@@ -19,10 +19,12 @@ public interface GetPhotosService extends BaseNetworkService {
     void setCurrentPageNumber(int pageNumber);
 
     interface GetPhotosCallback {
+        void onLoading();
+
         void onFirstPhotoPageLoaded(List<Photo> photosResponse);
 
         void onNextPhotoPageLoaded(List<Photo> photosList);
 
-        void onPhotoListLoadFail();
+        void onPhotoListLoadFailed();
     }
 }

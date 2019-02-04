@@ -46,6 +46,11 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
     }
 
     @Override
+    public void onLoading() {
+        // No op
+    }
+
+    @Override
     public void onFirstPhotoPageLoaded(List<Photo> photosResponse) {
         // No op
     }
@@ -56,7 +61,7 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
     }
 
     @Override
-    public void onPhotoListLoadFail() {
+    public void onPhotoListLoadFailed() {
         // TODO display load error msg
     }
 }

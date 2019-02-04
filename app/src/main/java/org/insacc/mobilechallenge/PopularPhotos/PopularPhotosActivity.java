@@ -141,6 +141,13 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mPhotoListAdapter.appendPhotosList(photos);
     }
 
+    @Override
+    public void showLoadingIndicator() {
+        if (mPhotoListAdapter.getPhotosList().size() == 0) {
+            mRefreshLayout.setRefreshing(true);
+        }
+    }
+
     /**
      * Displays an error message if the photos could not be loaded from the
      * server

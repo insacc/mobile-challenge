@@ -67,6 +67,11 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.setCurrentPageNumber(pageNumber);
     }
 
+    @Override
+    public void onLoading() {
+        mView.showLoadingIndicator();
+    }
+
     /**
      * Called when the photos are fetched from the server. Populates the recycler view list adapter.
      * @param photosResponse the photos list that is fetched from the server
@@ -89,7 +94,7 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
      * Called when the application could not fetch the photos from the server.
      */
     @Override
-    public void onPhotoListLoadFail() {
+    public void onPhotoListLoadFailed() {
         mView.displayLoadPhotoErrorMsg();
     }
 }

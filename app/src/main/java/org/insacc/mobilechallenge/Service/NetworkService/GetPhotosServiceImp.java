@@ -60,6 +60,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
         mLoading = true;
+        callback.onLoading();
         getPhotos.subscribe(new Observer<List<Photo>>() {
             @Override
             public void onSubscribe(@NonNull Disposable disposable) {
@@ -81,7 +82,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
             @Override
             public void onError(@NonNull Throwable e) {
                 mLoading = false;
-                callback.onPhotoListLoadFail();
+                callback.onPhotoListLoadFailed();
             }
 
             @Override
