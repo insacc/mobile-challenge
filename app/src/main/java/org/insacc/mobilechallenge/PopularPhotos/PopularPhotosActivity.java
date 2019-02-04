@@ -52,7 +52,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
                 .getPhotosServiceModule(new GetPhotosServiceModule())
                 .popularPhotosModule(new PopularPhotosModule(this))
                 .build().inject(this);
-        mPhotoListAdapter = new PhotoListAdapter(this, new ArrayList<Photo>());
+        mPhotoListAdapter = new PhotoListAdapter(this);
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
         mPhotosRecyclerList.setLayoutManager(mGreedoLayoutManager);
         mPhotosRecyclerList.setAdapter(mPhotoListAdapter);
@@ -114,7 +114,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      *                 by the user.
      */
     @Override
-    public void onImageClicked(int position) {
+    public void onPhotoClicked(int position) {
         mPresenter.callFullScreenPhotoDialog(position);
     }
 

@@ -17,7 +17,7 @@ public interface PopularPhotosContract {
 
         void displayLoadPhotoErrorMsg();
 
-        void onImageClicked(int position);
+        void onPhotoClicked(int position);
 
         void openFullScreenPhotoDialog(int position);
 
