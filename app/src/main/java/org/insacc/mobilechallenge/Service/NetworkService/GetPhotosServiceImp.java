@@ -41,12 +41,20 @@ public class GetPhotosServiceImp implements GetPhotosService {
         loadPhotosHelper(callback);
     }
 
+    /**
+     * Resets the current page number to 1 and loads the photos from the server.
+     * @param callback the callback which will be called once the network request is done.
+     */
     @Override
     public void refreshPhotos(GetPhotosCallback callback) {
         mPageNumber = 1;
         loadPhotosHelper(callback);
     }
 
+    /**
+     * Actually makes the network request and passes the photos back using the callback
+     * @param callback the callback which will be called once the network request is done.
+     */
     private void loadPhotosHelper(final GetPhotosCallback callback) {
         Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, mPageNumber, 25)
                 .observeOn(AndroidSchedulers.mainThread())

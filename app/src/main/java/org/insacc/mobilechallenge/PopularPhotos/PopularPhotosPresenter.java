@@ -3,7 +3,6 @@ package org.insacc.mobilechallenge.PopularPhotos;
 import org.insacc.mobilechallenge.Model.Photo;
 import org.insacc.mobilechallenge.Service.NetworkService.GetPhotosService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,27 +50,36 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.unSubscribe();
     }
 
+    /**
+     * @return the current photo page number from the service
+     */
     @Override
     public int getCurrentPageNumber() {
         return mGetPhotosService.getCurrentPageNumber();
     }
 
+    /**
+     * Sets the current photo page number to the get photo service after an orientation change
+     * @param pageNumber the last page number, that was fetched
+     */
     @Override
     public void setCurrentPageNumber(int pageNumber) {
         mGetPhotosService.setCurrentPageNumber(pageNumber);
     }
 
     /**
-     * Called when the photos are fetched from the server. Populates the recycler view list adapter
-     * and notifies the slider view depending on the flag.
-     * @param photosResponse the server response object that is fetched from the server
+     * Called when the photos are fetched from the server. Populates the recycler view list adapter.
+     * @param photosResponse the photos list that is fetched from the server
      */
     @Override
     public void onFirstPhotoPageLoaded(List<Photo> photosResponse) {
         mView.setPhotosList(photosResponse);
     }
 
-    // TODO handle refresh and next page loads separately
+    /**
+     * Called when non first page photos are fetched from the server.
+     * @param photosList the photos list that is fetched from the server
+     */
     @Override
     public void onNextPhotoPageLoaded(List<Photo> photosList) {
         mView.appendPhotosList(photosList);

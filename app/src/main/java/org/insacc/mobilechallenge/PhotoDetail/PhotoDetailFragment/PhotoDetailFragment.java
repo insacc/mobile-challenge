@@ -70,7 +70,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
                 .photoDetailModule(new PhotoDetailModule(this)).build().inject(this);
         ButterKnife.bind(this, root);
         extractPhotoDetail();
-        mPresenter.callLoadPhotoDetails();
+        mPresenter.setPhotoDetails();
 
         return root;
     }

@@ -19,16 +19,27 @@ public class PhotoDetailSlidePresenter implements PhotoDetailSlideContract.Prese
         this.mGetPhotosService = getPhotosService;
     }
 
+    /**
+     * Loads more photos from the server using the network service
+     */
     @Override
     public void loadMorePhotos() {
         mGetPhotosService.loadPhotos(this);
     }
 
+    /**
+     * Sets the current photo page number to the network service
+     * @param pageNumber the current page number
+     */
     @Override
     public void setCurrentPageNumber(int pageNumber) {
         mGetPhotosService.setCurrentPageNumber(pageNumber);
     }
 
+    /**
+     *
+     * @return the current photo page number
+     */
     @Override
     public int getCurrentPageNumber() {
         return mGetPhotosService.getCurrentPageNumber();

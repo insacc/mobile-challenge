@@ -14,6 +14,6 @@ public interface PhotoDetailContract {
     }
 
     interface Presenter {
-        void callLoadPhotoDetails();
+        void setPhotoDetails();
     }
 }

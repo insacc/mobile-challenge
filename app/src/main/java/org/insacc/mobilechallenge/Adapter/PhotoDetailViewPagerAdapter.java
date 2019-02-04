@@ -19,7 +19,6 @@ import java.util.List;
 
 public class PhotoDetailViewPagerAdapter extends FragmentStatePagerAdapter {
     private static final int LOAD_NEXT_PAGE_THRESHOLD = 3;
-
     //The list of photos that this slider needs to display
     private List<Photo> mPhotoList;
     //The slider view which contains the view pager ui object.

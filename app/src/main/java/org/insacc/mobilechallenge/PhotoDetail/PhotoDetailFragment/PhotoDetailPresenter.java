@@ -16,7 +16,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
      * Calls the functions to load the details of the photo.
      */
     @Override
-    public void callLoadPhotoDetails() {
+    public void setPhotoDetails() {
         mView.loadPhoto();
         mView.setPhotoDescription();
     }
