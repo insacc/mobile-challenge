@@ -61,7 +61,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         if (savedInstanceState != null) {
             photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
             mSelectedPhotoPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
-            mPresenter.setCurrentPageNumber(getIntent().getIntExtra(ARG_CURRENT_PAGE, 1));
+            mPresenter.setCurrentPageNumber(savedInstanceState.getInt(ARG_CURRENT_PAGE, 1));
         } else if (getIntent() != null && getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST) != null) {
             photosList = getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST);
             mSelectedPhotoPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
