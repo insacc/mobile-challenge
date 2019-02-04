@@ -12,6 +12,8 @@ import java.util.List;
 public interface GetPhotosService extends BaseNetworkService {
     void loadPhotos(GetPhotosCallback callback);
 
+    void refreshPhotos(GetPhotosCallback callback);
+
     int getCurrentPageNumber();
 
     void setCurrentPageNumber(int pageNumber);

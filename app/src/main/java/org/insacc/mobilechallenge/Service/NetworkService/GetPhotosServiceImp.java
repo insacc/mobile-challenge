@@ -35,9 +35,19 @@ public class GetPhotosServiceImp implements GetPhotosService {
      * @param callback the callback which will be called once the network request is done.
      */
     @Override
-    public void loadPhotos(final GetPhotosCallback callback) {
+    public void loadPhotos(GetPhotosCallback callback) {
         if (mLoading) return;
 
+        loadPhotosHelper(callback);
+    }
+
+    @Override
+    public void refreshPhotos(GetPhotosCallback callback) {
+        mPageNumber = 1;
+        loadPhotosHelper(callback);
+    }
+
+    private void loadPhotosHelper(final GetPhotosCallback callback) {
         Observable<List<Photo>> getPhotos = mApiCall.getPhotos(Config.API_KEY, mPageNumber, 25)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
@@ -45,6 +55,7 @@ public class GetPhotosServiceImp implements GetPhotosService {
         getPhotos.subscribe(new Observer<List<Photo>>() {
             @Override
             public void onSubscribe(@NonNull Disposable disposable) {
+                unSubscribe();
                 mSubscription = disposable;
             }
 
