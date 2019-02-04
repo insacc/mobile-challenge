@@ -82,7 +82,7 @@ public class PhotoDetailFragment extends Fragment implements PhotoDetailContract
     @Override
     public void loadPhoto() {
         Glide.with(this)
-                .load(mCurrentPhoto.getImageUrl().getFull())
+                .load(mCurrentPhoto.getImageUrl().getRegular())
                 .apply(RequestOptions.fitCenterTransform())
                 .into(mFullScreenImage);
     }
