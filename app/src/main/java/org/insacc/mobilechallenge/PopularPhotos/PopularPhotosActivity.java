@@ -61,6 +61,9 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         setupData(savedInstanceState);
     }
 
+    /**
+     * Setup the recycler view and swipe refresh layout
+     */
     private void setupUi() {
         mPhotoListAdapter = new PhotoListAdapter(this);
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
@@ -74,6 +77,11 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         });
     }
 
+    /**
+     * Extracts the photo data from the bundle if exists or make the network request to fetch photos
+     *
+     * @param savedInstanceState the bundle which will hold the essential data in case of a orientation change
+     */
     private void setupData(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             mPresenter.loadPhotos();
@@ -115,6 +123,11 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         mPhotoListAdapter.setPhotosList(photos);
     }
 
+    /**
+     * Called with a list of photos which needs to be appended to the photos list
+     *
+     * @param photos photos list that needs to appended
+     */
     @Override
     public void appendPhotosList(List<Photo> photos) {
         mPhotoListAdapter.appendPhotosList(photos);
@@ -153,6 +166,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
         Intent intent = new Intent(this, PhotoDetailActivity.class);
         intent.putExtra(PhotoDetailActivity.ARG_CURRENT_PHOTO_POSITION, position);
         intent.putExtra(PhotoDetailActivity.ARG_KEY_PHOTOS_LIST, (ArrayList) mPhotoListAdapter.getPhotosList());
+        intent.putExtra(PhotoDetailActivity.ARG_CURRENT_PAGE, mPresenter.getCurrentPageNumber());
         startActivityForResult(intent, REQUEST_PHOTO_DETAIL);
     }
 

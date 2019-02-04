@@ -61,9 +61,11 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         if (savedInstanceState != null) {
             photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
             mSelectedPhotoPosition = savedInstanceState.getInt(ARG_CURRENT_PHOTO_POSITION, 0);
+            mPresenter.setCurrentPageNumber(getIntent().getIntExtra(ARG_CURRENT_PAGE, 1));
         } else if (getIntent() != null && getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST) != null) {
             photosList = getIntent().getParcelableArrayListExtra(ARG_KEY_PHOTOS_LIST);
             mSelectedPhotoPosition = getIntent().getIntExtra(ARG_CURRENT_PHOTO_POSITION, 0);
+            mPresenter.setCurrentPageNumber(getIntent().getIntExtra(ARG_CURRENT_PAGE, 1));
         }
         setupViewPager(photosList);
     }
@@ -104,6 +106,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetai
         outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>)
                 mPhotoSliderAdapter.getPhotosList());
         outState.putInt(ARG_CURRENT_PHOTO_POSITION, mPhotoSlider.getCurrentItem());
+        outState.putInt(ARG_CURRENT_PAGE, mPresenter.getCurrentPageNumber());
     }
 
     /**
