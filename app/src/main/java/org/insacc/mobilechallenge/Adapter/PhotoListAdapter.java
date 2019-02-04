@@ -38,9 +38,13 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         notifyDataSetChanged();
     }
 
-    public void updatePhotoList(List<Photo> photos) {
+    public void appendPhotosList(List<Photo> photos) {
         mPhotoList.addAll(photos);
         notifyDataSetChanged();
+    }
+
+    public List<Photo> getPhotosList() {
+        return mPhotoList;
     }
 
     @Override

@@ -14,7 +14,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     private PopularPhotosContract.View mView;
     //Network service class
     private GetPhotosService mGetPhotosService;
-    private List<Photo> mPhotos = new ArrayList<>();
 
     public PopularPhotosPresenter(PopularPhotosContract.View view, GetPhotosService getPhotosService) {
         this.mView = view;
@@ -29,6 +28,11 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
         mGetPhotosService.loadPhotos(this);
     }
 
+    @Override
+    public void refreshPhotos() {
+        mGetPhotosService.refreshPhotos(this);
+    }
+
     /**
      * Calls the full screen slider ui for the image at the position @param position.
      * @param position the position of the image, that needs to be
@@ -37,11 +41,6 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
     @Override
     public void callFullScreenPhotoDialog(int position) {
         mView.openFullScreenPhotoDialog(position);
-    }
-
-    @Override
-    public ArrayList<Photo> getPhotosList() {
-        return (ArrayList<Photo>) mPhotos;
     }
 
     /**
@@ -69,24 +68,13 @@ public class PopularPhotosPresenter implements PopularPhotosContract.Presenter, 
      */
     @Override
     public void onFirstPhotoPageLoaded(List<Photo> photosResponse) {
-        setPhotosList(photosResponse);
-        mView.populatePhotosList(photosResponse);
+        mView.setPhotosList(photosResponse);
     }
 
     // TODO handle refresh and next page loads separately
     @Override
     public void onNextPhotoPageLoaded(List<Photo> photosList) {
-        setPhotosList(photosList);
-        mView.populatePhotosList(photosList);
-    }
-
-    @Override
-    public void setPhotosList(List<Photo> photosList) {
-        if (mPhotos.isEmpty()) {
-            mPhotos = photosList;
-        } else {
-            mPhotos.addAll(photosList);
-        }
+        mView.appendPhotosList(photosList);
     }
 
     /**

@@ -13,7 +13,9 @@ import java.util.List;
 
 public interface PopularPhotosContract {
     interface View {
-        void populatePhotosList(List<Photo> photos);
+        void setPhotosList(List<Photo> photos);
+
+        void appendPhotosList(List<Photo> photos);
 
         void displayLoadPhotoErrorMsg();
 
@@ -27,11 +29,9 @@ public interface PopularPhotosContract {
     interface Presenter {
         void loadPhotos();
 
+        void refreshPhotos();
+
         void callFullScreenPhotoDialog(int position);
-
-        ArrayList<Photo> getPhotosList();
-
-        void setPhotosList(List<Photo> photosList);
 
         void unSubscribe();
 

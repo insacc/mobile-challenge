@@ -2,7 +2,9 @@ package org.insacc.mobilechallenge.PopularPhotos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.fivehundredpx.greedolayout.GreedoLayoutManager;
+
 import org.insacc.mobilechallenge.Adapter.PhotoListAdapter;
 import org.insacc.mobilechallenge.AppModule.GetPhotosServiceModule;
 import org.insacc.mobilechallenge.Model.Photo;
@@ -41,6 +44,8 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     private PhotoListAdapter mPhotoListAdapter;
     @BindView(R.id.popular_photo_list)
     RecyclerView mPhotosRecyclerList;
+    @BindView(R.id.refresh_layout_popular_activity)
+    SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +57,32 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
                 .getPhotosServiceModule(new GetPhotosServiceModule())
                 .popularPhotosModule(new PopularPhotosModule(this))
                 .build().inject(this);
+        setupUi();
+        setupData(savedInstanceState);
+    }
+
+    private void setupUi() {
         mPhotoListAdapter = new PhotoListAdapter(this);
         mGreedoLayoutManager = new GreedoLayoutManager(mPhotoListAdapter);
         mPhotosRecyclerList.setLayoutManager(mGreedoLayoutManager);
         mPhotosRecyclerList.setAdapter(mPhotoListAdapter);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.refreshPhotos();
+            }
+        });
+    }
 
+    private void setupData(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             mPresenter.loadPhotos();
         else {
             int pageCount = savedInstanceState.getInt(ARG_KEY_PAGE_COUNT);
             mPresenter.setCurrentPageNumber(pageCount);
             List<Photo> photosList = savedInstanceState.getParcelableArrayList(ARG_KEY_PHOTOS_LIST);
-            mPresenter.setPhotosList(photosList);
             int lastListPosition = savedInstanceState.getInt(ARG_KEY_LIST_VIEW_LAST_POSITION);
-            mPhotoListAdapter.updatePhotoList(photosList);
+            mPhotoListAdapter.appendPhotosList(photosList);
             mGreedoLayoutManager.scrollToPosition(lastListPosition);
         }
     }
@@ -81,7 +98,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, mPresenter.getPhotosList());
+        outState.putParcelableArrayList(ARG_KEY_PHOTOS_LIST, (ArrayList<? extends Parcelable>) mPhotoListAdapter.getPhotosList());
         outState.putInt(ARG_KEY_LIST_VIEW_LAST_POSITION, mGreedoLayoutManager.findFirstVisibleItemPosition());
         outState.putInt(ARG_KEY_PAGE_COUNT, mPresenter.getCurrentPageNumber());
     }
@@ -93,8 +110,14 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      * @param photos the list of photos received from the server
      */
     @Override
-    public void populatePhotosList(List<Photo> photos) {
-        mPhotoListAdapter.updatePhotoList(photos);
+    public void setPhotosList(List<Photo> photos) {
+        mRefreshLayout.setRefreshing(false);
+        mPhotoListAdapter.setPhotosList(photos);
+    }
+
+    @Override
+    public void appendPhotosList(List<Photo> photos) {
+        mPhotoListAdapter.appendPhotosList(photos);
     }
 
     /**
@@ -103,6 +126,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
      */
     @Override
     public void displayLoadPhotoErrorMsg() {
+        mRefreshLayout.setRefreshing(false);
         Toast.makeText(this, getString(R.string.photo_load_fail), Toast.LENGTH_LONG).show();
     }
 
@@ -128,8 +152,7 @@ public class PopularPhotosActivity extends AppCompatActivity implements PopularP
     public void openFullScreenPhotoDialog(int position) {
         Intent intent = new Intent(this, PhotoDetailActivity.class);
         intent.putExtra(PhotoDetailActivity.ARG_CURRENT_PHOTO_POSITION, position);
-        intent.putExtra(PhotoDetailActivity.ARG_KEY_PHOTOS_LIST, mPresenter.getPhotosList());
-
+        intent.putExtra(PhotoDetailActivity.ARG_KEY_PHOTOS_LIST, (ArrayList) mPhotoListAdapter.getPhotosList());
         startActivityForResult(intent, REQUEST_PHOTO_DETAIL);
     }
 
